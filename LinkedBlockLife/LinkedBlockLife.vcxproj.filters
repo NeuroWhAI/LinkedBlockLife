@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="LinkedBlockLife">
+      <UniqueIdentifier>{d886c6a7-3572-4030-b4b4-fbcc81c996cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LinkedBlockLife\Scene">
+      <UniqueIdentifier>{86c29e64-c048-4fa5-ad17-92f30e586f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LinkedBlockLife\World">
+      <UniqueIdentifier>{8f44c5b3-e052-460f-ad71-0707e9a5145f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LinkedBlockLife\Tile">
+      <UniqueIdentifier>{46893f9d-0ab6-4ac6-8bbe-c0eca8eeb3ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LinkedBlockLife\Utility">
+      <UniqueIdentifier>{9b06471e-de1e-424a-a56e-d77de633fd61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LinkedBlockLife\Solver">
+      <UniqueIdentifier>{699c5226-01a1-400a-8214-ddf253aa7377}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>LinkedBlockLife\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>LinkedBlockLife\World</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawableWorld.cpp">
+      <Filter>LinkedBlockLife\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>LinkedBlockLife\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadPool.cpp">
+      <Filter>LinkedBlockLife\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="AirSolver.cpp">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MainScene.h">
+      <Filter>LinkedBlockLife\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>LinkedBlockLife\World</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableWorld.h">
+      <Filter>LinkedBlockLife\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>LinkedBlockLife\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadPool.h">
+      <Filter>LinkedBlockLife\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="AirSolver.h">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ThreadPool.inl">
+      <Filter>LinkedBlockLife\Utility</Filter>
+    </None>
+  </ItemGroup>
+</Project>
