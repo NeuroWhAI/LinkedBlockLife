@@ -5,6 +5,7 @@
 
 World::World(std::size_t size)
 	: m_airSolver(m_board, m_threadPool)
+	, m_linkSolver(m_blocks, m_threadPool)
 {
 	m_board.resize(size);
 
@@ -24,5 +25,6 @@ World::World(std::size_t size)
 void World::update()
 {
 	m_airSolver.solve();
+	m_linkSolver.solve();
 }
 

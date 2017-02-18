@@ -7,7 +7,10 @@
 
 #include "ThreadPool.h"
 #include "Tile.h"
+#include "Linker.h"
+#include "Block.h"
 #include "AirSolver.h"
+#include "LinkSolver.h"
 
 
 
@@ -28,10 +31,13 @@ private:
 
 protected:
 	TileBoard m_board;
+	std::vector<std::unique_ptr<Linker>> m_linkers;
+	std::vector<std::unique_ptr<Block>> m_blocks;
 
 
 private:
 	AirSolver m_airSolver;
+	LinkSolver m_linkSolver;
 
 
 public:

@@ -42,6 +42,11 @@ void DrawableWorld::drawAir(Graphics& g)
 				static_cast<i32>((p > 0) ? 0 : std::min(-p, 255.0f)),
 			};
 
+			if (m_board[y][x]->isBlocked())
+			{
+				color = caDraw::Color::Gray;
+			}
+
 			rectArt->fillRectangle(x * 4, y * 4, 4, 4, color);
 		}
 	}

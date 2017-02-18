@@ -31,6 +31,15 @@
     <Filter Include="LinkedBlockLife\Solver">
       <UniqueIdentifier>{699c5226-01a1-400a-8214-ddf253aa7377}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LinkedBlockLife\Block">
+      <UniqueIdentifier>{b7382149-75a3-4ca1-b931-dd185a0f946a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LinkedBlockLife\Linker">
+      <UniqueIdentifier>{18185f4b-31e3-4d5d-870c-a0554235dca5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LinkedBlockLife\LinkerPort">
+      <UniqueIdentifier>{83f8b677-28fe-47a6-a9d1-82da68f50146}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +63,18 @@
     <ClCompile Include="AirSolver.cpp">
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>LinkedBlockLife\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Linker.cpp">
+      <Filter>LinkedBlockLife\Linker</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkerPort.cpp">
+      <Filter>LinkedBlockLife\LinkerPort</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkSolver.cpp">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -72,6 +93,18 @@
       <Filter>LinkedBlockLife\Utility</Filter>
     </ClInclude>
     <ClInclude Include="AirSolver.h">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>LinkedBlockLife\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Linker.h">
+      <Filter>LinkedBlockLife\Linker</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkerPort.h">
+      <Filter>LinkedBlockLife\LinkerPort</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkSolver.h">
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClInclude>
   </ItemGroup>
