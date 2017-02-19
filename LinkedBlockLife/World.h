@@ -6,18 +6,17 @@
 #include <vector>
 
 #include "ThreadPool.h"
+#include "Solver.h"
 #include "Tile.h"
 #include "Linker.h"
 #include "Block.h"
-#include "AirSolver.h"
-#include "LinkSolver.h"
 
 
 
 
 class World
 {
-public:
+private:
 	using TileBoard = std::vector<std::vector<std::unique_ptr<Tile>>>;
 
 
@@ -29,15 +28,14 @@ private:
 	ThreadPool m_threadPool;
 
 
+private:
+	Solver m_solver;
+
+
 protected:
 	TileBoard m_board;
 	std::vector<std::unique_ptr<Linker>> m_linkers;
 	std::vector<std::unique_ptr<Block>> m_blocks;
-
-
-private:
-	AirSolver m_airSolver;
-	LinkSolver m_linkSolver;
 
 
 public:

@@ -8,31 +8,19 @@
 
 
 
-class ThreadPool;
 class Block;
+class Linker;
 
 
 class LinkSolver
 {
-private:
-	using BlockList = std::vector<std::unique_ptr<Block>>;
+public:
+	LinkSolver();
 
 
 public:
-	LinkSolver(BlockList& blockList, ThreadPool& threadPool);
-
-
-private:
-	BlockList& m_blocks;
-	ThreadPool& m_threadPool;
-
-
-public:
-	void solve();
-
-
-private:
-	void updateRange(std::size_t beginY, std::size_t count);
+	void updateLinker(Linker& linker);
+	void updateBlock(Block& block);
 };
 
 

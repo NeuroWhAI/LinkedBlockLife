@@ -21,6 +21,7 @@ public:
 private:
 	caDraw::VectorF m_position;
 	caDraw::VectorF m_speed;
+	caDraw::VectorF m_force;
 
 
 private:
@@ -34,11 +35,14 @@ public:
 
 	const caDraw::VectorF& getSpeed() const;
 	void setSpeed(const caDraw::VectorF& speed);
-	void addSpeed(const caDraw::VectorF& speed);
+
+	const caDraw::VectorF& getForce() const;
+	void setForce(const caDraw::VectorF& force);
+	void addForce(const caDraw::VectorF& force);
 
 
 public:
-	void updatePosition();
+	void update();
 
 
 public:

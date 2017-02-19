@@ -20,6 +20,10 @@ public:
 	explicit DrawableWorld(std::size_t size);
 
 
+private:
+	int m_pixelPerUnit;
+
+
 protected:
 	virtual void onDraw(Graphics& g, const Transform& parentTransform) override;
 

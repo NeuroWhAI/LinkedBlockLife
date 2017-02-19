@@ -8,7 +8,6 @@
 
 
 
-class ThreadPool;
 class Tile;
 
 
@@ -19,21 +18,12 @@ private:
 
 
 public:
-	AirSolver(TileBoard& board, ThreadPool& threadPool);
-
-
-private:
-	TileBoard& m_board;
-	ThreadPool& m_threadPool;
+	AirSolver();
 
 
 public:
-	void solve();
-
-
-private:
-	void updateRange(std::size_t beginY, std::size_t count);
-	void updateTileRange(std::size_t beginY, std::size_t count);
+	void updateNearTile(TileBoard& board, Tile& here, std::size_t x, std::size_t y);
+	void updateTile(Tile& tile);
 };
 
 

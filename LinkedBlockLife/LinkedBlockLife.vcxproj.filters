@@ -75,6 +75,9 @@
     <ClCompile Include="LinkSolver.cpp">
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClCompile>
+    <ClCompile Include="Solver.cpp">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -105,6 +108,9 @@
       <Filter>LinkedBlockLife\LinkerPort</Filter>
     </ClInclude>
     <ClInclude Include="LinkSolver.h">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="Solver.h">
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClInclude>
   </ItemGroup>

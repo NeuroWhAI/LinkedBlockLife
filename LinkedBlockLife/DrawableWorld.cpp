@@ -5,6 +5,8 @@
 
 DrawableWorld::DrawableWorld(std::size_t size)
 	: World(size)
+
+	, m_pixelPerUnit(4)
 {
 
 }
@@ -23,7 +25,10 @@ void DrawableWorld::drawAir(Graphics& g)
 	const std::size_t boardSize = m_board.size();
 
 
+	const float pixelPerUnitF = static_cast<float>(m_pixelPerUnit);
+
 	auto& rectArt = g.rectangleArtist;
+	auto& circleArt = g.ellipseArtist;
 
 
 	rectArt->beginFillRectangle();
@@ -47,11 +52,26 @@ void DrawableWorld::drawAir(Graphics& g)
 				color = caDraw::Color::Gray;
 			}
 
-			rectArt->fillRectangle(x * 4, y * 4, 4, 4, color);
+			rectArt->fillRectangle(x * m_pixelPerUnit, y * m_pixelPerUnit, 4, 4, color);
 		}
 	}
 
 
 	rectArt->endFillRectangle();
+
+
+	circleArt->beginFillEllipse();
+
+
+	for (auto& block : m_blocks)
+	{
+		circleArt->fillEllipse(block->getPosition().x * m_pixelPerUnit,
+			block->getPosition().y * m_pixelPerUnit,
+			pixelPerUnitF, pixelPerUnitF,
+			caDraw::Color::Gray);
+	}
+
+
+	circleArt->endFillEllipse();
 }
 
