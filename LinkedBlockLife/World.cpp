@@ -19,9 +19,9 @@ World::World(std::size_t size)
 	}
 
 	// Test
-	m_blocks.emplace_back(std::make_unique<Block>());
-	m_blocks.emplace_back(std::make_unique<Block>());
-	m_blocks.emplace_back(std::make_unique<Block>());
+	addBlock(std::make_unique<Block>(), 20, 20);
+	addBlock(std::make_unique<Block>(), 21, 20);
+	addBlock(std::make_unique<Block>(), 22, 21);
 	m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[0], *m_blocks[1]));
 	m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[1], *m_blocks[2]));
 	m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[2], *m_blocks[0]));
@@ -35,10 +35,15 @@ World::World(std::size_t size)
 	m_blocks[2]->getLinkerPort().connect(m_linkers[2].get());
 	m_blocks[0]->getLinkerPort().connect(m_linkers[2].get());
 
-	m_blocks[0]->setPosition({ 20, 20 });
-	m_blocks[1]->setPosition({ 21, 20 });
-	m_blocks[2]->setPosition({ 22, 21 });
-	m_blocks[2]->setForce({ 0.2f, 0 });
+	m_blocks[0]->setForce({ 1.0f, 0 });
+	m_blocks[1]->setForce({ 1.0f, 0 });
+	m_blocks[2]->setForce({ 1.0f, 0 });
+
+	for (int i = 0; i < 8; ++i)
+	{
+		auto index = addBlock(std::make_unique<Block>(), 4, 16 + i);
+		m_blocks[index]->setForce({ 1.0f, 0 });
+	}
 }
 
 //#################################################################################################
@@ -46,11 +51,22 @@ World::World(std::size_t size)
 void World::update()
 {
 	m_solver.solve();
+}
 
-	// Temp
-	for (auto& block : m_blocks)
-	{
-		block->update();
-	}
+//#################################################################################################
+
+std::size_t World::addBlock(std::unique_ptr<Block> block, std::size_t x, std::size_t y)
+{
+	auto index = m_blocks.size();
+
+
+	block->setPosition({ static_cast<float>(x), static_cast<float>(y) });
+
+	m_board[y][x]->addBlock(block.get());
+
+	m_blocks.emplace_back(std::move(block));
+
+
+	return index;
 }
 

@@ -23,6 +23,8 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 	const auto boardSize = board.size();
 
 
+	const float pressureHere = here.getPressure();
+
 	auto norWindHere = here.getWind();
 	norWindHere.normalize();
 
@@ -62,7 +64,7 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 
 		if (near->isBlocked() == false)
 		{
-			float airGap = here.getPressure() - near->getPressure();
+			float airGap = pressureHere - near->getPressure();
 
 			if (airGap > 0)
 			{
@@ -93,7 +95,7 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 				near->addNextWind(moveWind);
 				here.addNextWind(-moveWind);
 
-				float moveAir = here.getPressure() * scale;
+				float moveAir = pressureHere * scale;
 
 				near->addNextPressure(moveAir);
 				here.addNextPressure(-moveAir);
@@ -103,8 +105,15 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 }
 
 
-void AirSolver::updateTile(Tile& tile)
+void AirSolver::updateTile(Tile& tile, std::size_t boardSize, std::size_t x, std::size_t y)
 {
+	// 테두리에 바람이 누적되고 소멸하지 않는 문제 해결.
+	if (x == 0 || x == boardSize - 1 || y == 0 || y == boardSize - 1)
+	{
+		tile.setNextWind({ 0, 0 });
+	}
+
+
 	tile.updateAir();
 }
 

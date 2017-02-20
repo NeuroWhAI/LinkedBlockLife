@@ -29,6 +29,35 @@ void DrawableWorld::drawAir(Graphics& g)
 
 	auto& rectArt = g.rectangleArtist;
 	auto& circleArt = g.ellipseArtist;
+	auto& lineArt = g.lineArtist;
+
+
+	lineArt->beginDrawLine(1.5f);
+
+
+	for (std::size_t y = 0; y < boardSize; ++y)
+	{
+		for (std::size_t x = 0; x < boardSize; ++x)
+		{
+			const auto& vec = m_board[y][x]->getWind();
+
+			float p = m_board[y][x]->getPressure();
+			float v = vec.getLength();
+
+			caDraw::Color color{
+				static_cast<i32>(std::min(v, 255.0f)),
+				static_cast<i32>((p < 0) ? 0 : std::min(p, 255.0f)),
+				static_cast<i32>((p > 0) ? 0 : std::min(-p, 255.0f)),
+			};
+
+			lineArt->drawLine(256 + (int)x * 8, 256 + (int)y * 8,
+				256 + x * 8 + (int)(vec.x), 256 + y * 8 + (int)(vec.y),
+				color);
+		}
+	}
+
+
+	lineArt->endDrawLine();
 
 
 	rectArt->beginFillRectangle();

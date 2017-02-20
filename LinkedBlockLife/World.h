@@ -40,6 +40,10 @@ protected:
 
 public:
 	void update();
+
+
+protected:
+	std::size_t addBlock(std::unique_ptr<Block> block, std::size_t x, std::size_t y);
 };
 
 

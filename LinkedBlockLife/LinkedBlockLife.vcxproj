@@ -161,6 +161,7 @@
     <ClCompile Include="LinkSolver.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MoveSolver.cpp" />
     <ClCompile Include="Solver.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="LinkerPort.h" />
     <ClInclude Include="LinkSolver.h" />
     <ClInclude Include="MainScene.h" />
+    <ClInclude Include="MoveSolver.h" />
     <ClInclude Include="Solver.h" />
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Tile.h" />

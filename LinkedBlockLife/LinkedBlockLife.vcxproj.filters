@@ -78,6 +78,9 @@
     <ClCompile Include="Solver.cpp">
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClCompile>
+    <ClCompile Include="MoveSolver.cpp">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -111,6 +114,9 @@
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClInclude>
     <ClInclude Include="Solver.h">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveSolver.h">
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClInclude>
   </ItemGroup>

@@ -17,7 +17,7 @@ public:
 
 
 private:
-	float m_defaultLength;
+	const float m_defaultLength;
 	caDraw::VectorF m_dir;
 	float m_length;
 

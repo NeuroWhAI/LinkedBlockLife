@@ -10,6 +10,7 @@
 
 
 class Linker;
+class Tile;
 
 
 class Block
@@ -42,7 +43,8 @@ public:
 
 
 public:
-	void update();
+	void updateSpeed();
+	void updatePosition();
 
 
 public:

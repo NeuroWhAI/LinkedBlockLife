@@ -23,7 +23,7 @@ public:
 
 public:
 	void updateNearTile(TileBoard& board, Tile& here, std::size_t x, std::size_t y);
-	void updateTile(Tile& tile);
+	void updateTile(Tile& tile, std::size_t boardSize, std::size_t x, std::size_t y);
 };
 
 

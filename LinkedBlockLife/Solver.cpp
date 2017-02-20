@@ -1,6 +1,7 @@
 #include "Solver.h"
 
 #include "ThreadPool.h"
+#include "Tile.h"
 
 
 
@@ -175,8 +176,8 @@ void Solver::foreachBlock(std::size_t coreCount)
 void Solver::foreachTileSafelyRange(std::size_t beginY, std::size_t count)
 {
 	const size_t boardSize = m_tileBoard.size();
-
 	const size_t endY = std::min(beginY + count, boardSize);
+
 
 	for (size_t y = beginY; y < endY; ++y)
 	{
@@ -184,7 +185,20 @@ void Solver::foreachTileSafelyRange(std::size_t beginY, std::size_t count)
 
 		for (size_t x = 0; x < boardSize; ++x)
 		{
-			m_airSolver.updateNearTile(m_tileBoard, *line[x], x, y);
+			auto& tile = *line[x];
+
+			auto& blocks = tile.getBlocks();
+			if (!blocks.empty())
+			{
+				auto blockDensity = blocks.size();
+
+				for (auto* pBlock : blocks)
+				{
+					m_moveSolver.updateBlock(m_tileBoard, boardSize, *pBlock, tile, blockDensity);
+				}
+			}
+
+			m_airSolver.updateNearTile(m_tileBoard, tile, x, y);
 		}
 	}
 }
@@ -192,15 +206,20 @@ void Solver::foreachTileSafelyRange(std::size_t beginY, std::size_t count)
 
 void Solver::foreachTileRange(std::size_t beginY, std::size_t count)
 {
+	const size_t boardSize = m_tileBoard.size();
 	const size_t endY = std::min(beginY + count, m_tileBoard.size());
+
 
 	for (size_t y = beginY; y < endY; ++y)
 	{
 		auto& line = m_tileBoard[y];
 
-		for (auto& tile : line)
+		for (size_t x = 0; x < boardSize; ++x)
 		{
-			m_airSolver.updateTile(*tile);
+			auto& tile = *line[x];
+
+			m_airSolver.updateTile(tile, boardSize, x, y);
+			m_moveSolver.updateTile(tile);
 		}
 	}
 }
@@ -220,12 +239,15 @@ void Solver::foreachLinkerRange(std::size_t begin, std::size_t count)
 
 void Solver::foreachBlockRange(std::size_t begin, std::size_t count)
 {
+	const size_t boardSize = m_tileBoard.size();
 	const size_t endY = std::min(begin + count, m_blocks.size());
 
 
 	for (size_t b = begin; b < endY; ++b)
 	{
-		m_linkSolver.updateBlock(*m_blocks[b]);
+		auto& block = *m_blocks[b];
+
+		m_linkSolver.updateBlock(block);
 	}
 }
 

@@ -2,6 +2,8 @@
 #define __TILE_H__
 
 
+#include <vector>
+
 #include "CodeAdapter\EasyCA.h"
 
 
@@ -17,7 +19,9 @@ public:
 
 
 private:
-	Block* m_pBlock;
+	std::vector<Block*>* m_pBlocks;
+	std::vector<Block*>* m_pNextBlocks;
+	std::vector<Block*> m_blocks1, m_blocks2;
 
 
 private:
@@ -29,8 +33,10 @@ private:
 
 public:
 	bool isBlocked() const;
-	Block* getBlock() const;
-	void setBlock(Block* pBlock);
+	const std::vector<Block*>& getBlocks() const;
+	void addBlock(Block* pBlock);
+	const std::vector<Block*>& getNextBlocks() const;
+	void addNextBlock(Block* pBlock);
 
 
 public:
@@ -46,6 +52,7 @@ public:
 
 
 public:
+	void updateBlockList();
 	void updateAir();
 };
 

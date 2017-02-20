@@ -66,12 +66,28 @@ void Block::addForce(const caDraw::VectorF& force)
 
 //#################################################################################################
 
-void Block::update()
+void Block::updateSpeed()
 {
-	m_speed += m_force / 1.0f/*mass*/;
-	m_position += m_speed;
+	m_speed += m_force;
+
+
+	const float maxSpeed = 1.0f;
+	const float lengthSq = m_speed.getLengthSq();
+
+	if (lengthSq > maxSpeed)
+	{
+		// Normalize speed.
+		m_speed *= maxSpeed / std::sqrt(lengthSq);
+	}
+
 
 	m_force = caDraw::VectorF::Zero;
+}
+
+
+void Block::updatePosition()
+{
+	m_position += m_speed;
 }
 
 //#################################################################################################

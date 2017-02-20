@@ -4,8 +4,9 @@
 
 
 Tile::Tile()
-	: m_pBlock(nullptr)
-
+	: m_pBlocks(&m_blocks1)
+	, m_pNextBlocks(&m_blocks2)
+	
 	, m_wind(0, 0)
 	, m_nextWind(0, 0)
 	, m_pressure(10)
@@ -18,19 +19,31 @@ Tile::Tile()
 
 bool Tile::isBlocked() const
 {
-	return (m_pBlock != nullptr);
+	return (!m_pBlocks->empty());
 }
 
 
-Block* Tile::getBlock() const
+const std::vector<Block*>& Tile::getBlocks() const
 {
-	return m_pBlock;
+	return *m_pBlocks;
 }
 
 
-void Tile::setBlock(Block* pBlock)
+void Tile::addBlock(Block* pBlock)
 {
-	m_pBlock = pBlock;
+	m_pBlocks->emplace_back(pBlock);
+}
+
+
+const std::vector<Block*>& Tile::getNextBlocks() const
+{
+	return *m_pNextBlocks;
+}
+
+
+void Tile::addNextBlock(Block* pBlock)
+{
+	m_pNextBlocks->emplace_back(pBlock);
 }
 
 //#################################################################################################
@@ -85,14 +98,18 @@ void Tile::addNextPressure(float pressure)
 
 //#################################################################################################
 
+void Tile::updateBlockList()
+{
+	std::swap(m_pBlocks, m_pNextBlocks);
+	m_pNextBlocks->clear();
+}
+
+
 void Tile::updateAir()
 {
 	m_wind = m_nextWind;
 	m_pressure = m_nextPressure;
 
-	m_wind *= 0.9999f;
-
-	m_nextWind = m_wind;
-	m_nextPressure = m_pressure;
+	m_nextWind = m_wind * 0.9999f;
 }
 

@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <random>
 
 #include "Block.h"
 
@@ -40,14 +41,18 @@ void Linker::calculateDir()
 	m_length = m_dir.getLength();
 
 	// Normalize vector.
-	if (std::abs(m_length) > std::numeric_limits<f32>::epsilon())
+	if (m_length > std::numeric_limits<f32>::epsilon())
 	{
 		m_dir /= m_length;
 	}
 	else
 	{
-		// TODO: Randomly.
-		m_dir = { 1, 0 };
+		std::random_device rd;
+		std::uniform_int_distribution<> dist{ 1, 360 };
+
+		// Random direction.
+		m_dir = { std::cosf(dist(rd) * 0.01745329251f), std::sinf(dist(rd) * 0.01745329251f) };
+		m_length = 1.0f;
 	}
 }
 

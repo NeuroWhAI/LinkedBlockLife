@@ -7,6 +7,7 @@
 
 #include "AirSolver.h"
 #include "LinkSolver.h"
+#include "MoveSolver.h"
 
 
 
@@ -40,6 +41,7 @@ private:
 private:
 	AirSolver m_airSolver;
 	LinkSolver m_linkSolver;
+	MoveSolver m_moveSolver;
 
 
 public:
