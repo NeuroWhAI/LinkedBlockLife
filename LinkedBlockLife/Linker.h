@@ -18,8 +18,7 @@ public:
 
 private:
 	const float m_defaultLength;
-	caDraw::VectorF m_dir;
-	float m_length;
+	caDraw::VectorF m_elasticity;
 
 
 private:
@@ -33,8 +32,8 @@ public:
 
 
 public:
-	void calculateDir();
-	caDraw::VectorF calculateElasticity() const;
+	void calculateElasticity();
+	const caDraw::VectorF& getElasticity() const;
 };
 
 

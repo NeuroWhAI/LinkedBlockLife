@@ -19,7 +19,7 @@ LinkSolver::LinkSolver()
 
 void LinkSolver::updateLinker(Linker& linker)
 {
-	linker.calculateDir();
+	linker.calculateElasticity();
 }
 
 
@@ -31,14 +31,16 @@ void LinkSolver::updateBlock(Block& block)
 
 	for (auto* linker : linkers)
 	{
-		auto force = linker->calculateElasticity();
+		auto& force = linker->getElasticity();
 
 		if (&linker->getSecond() == &block)
 		{
-			force *= -1.0f;
+			block.addForce(-force);
 		}
-
-		block.addForce(force);
+		else
+		{
+			block.addForce(force);
+		}
 	}
 }
 

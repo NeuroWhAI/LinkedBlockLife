@@ -9,8 +9,8 @@ Tile::Tile()
 	
 	, m_wind(0, 0)
 	, m_nextWind(0, 0)
-	, m_pressure(10)
-	, m_nextPressure(10)
+	, m_pressure(100)
+	, m_nextPressure(100)
 {
 
 }

@@ -1,6 +1,7 @@
 #include "AirSolver.h"
 
 #include "Tile.h"
+#include "Block.h"
 
 
 
@@ -28,7 +29,7 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 	auto norWindHere = here.getWind();
 	norWindHere.normalize();
 
-	caDraw::VectorF dirVec[] = {
+	const caDraw::VectorF dirVec[] = {
 		{ 0, -1 },
 		{ 1, 0 },
 		{ 0, 1 },
@@ -51,6 +52,9 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 		xSubOne, x + 1, x + 1, xSubOne
 	};
 
+	/// 외력
+	caDraw::VectorF outerForce{ 0, 0 };
+
 	for (int n = 0; n < 8; ++n)
 	{
 		if (nearY[n] >= boardSize)
@@ -60,11 +64,23 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 
 
 		auto& near = board[nearY[n]][nearX[n]];
+		auto& windNear = near->getWind();
+		const auto pressureNear = near->getPressure();
 
 
+		// 외력 계산
+		if (dirVec[n].dotProduct(windNear) < 0)
+		{
+			outerForce += windNear * 0.001f;
+		}
+
+		outerForce += dirVec[n] * (-pressureNear * 0.0001f);
+
+
+		// 막힌 블럭이 아니면 기압차를 이용하여 기압의 이동과 바람을 계산한다.
 		if (near->isBlocked() == false)
 		{
-			float airGap = pressureHere - near->getPressure();
+			float airGap = pressureHere - pressureNear;
 
 			if (airGap > 0)
 			{
@@ -80,8 +96,10 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 
 		float dot = norWindHere.dotProduct(dirVec[n]);
 
+		// 바람이 부는 방향에 존재하는 타일인지 확인.
 		if (dot > 0)
 		{
+			/// 바람의 방향에 가까운 정도.
 			float scale = dot * dot * dot * 0.08f;
 
 			auto moveWind = here.getWind() * scale;
@@ -102,15 +120,35 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 			}
 		}
 	}
+
+
+	// 외력을 이용하여 타일에 존재하는 블럭들에게 힘을 가함.
+	auto& blocks = here.getBlocks();
+	
+	if (!blocks.empty())
+	{
+		const auto density = static_cast<float>(blocks.size());
+
+		outerForce /= density;
+
+		for (auto* pBlocks : blocks)
+		{
+			pBlocks->addForce(outerForce);
+		}
+	}
 }
 
 
 void AirSolver::updateTile(Tile& tile, std::size_t boardSize, std::size_t x, std::size_t y)
 {
 	// 테두리에 바람이 누적되고 소멸하지 않는 문제 해결.
-	if (x == 0 || x == boardSize - 1 || y == 0 || y == boardSize - 1)
+	if (x == 0 || x == boardSize - 1)
 	{
-		tile.setNextWind({ 0, 0 });
+		tile.setNextWind({ 0, tile.getNextWind().y * 0.99f });
+	}
+	if (y == 0 || y == boardSize - 1)
+	{
+		tile.setNextWind({ tile.getNextWind().x * 0.99f, 0 });
 	}
 
 

@@ -11,8 +11,7 @@
 
 Linker::Linker(Block& first, Block& second)
 	: m_defaultLength(1.0f)
-	, m_dir(0, 0)
-	, m_length(0)
+	, m_elasticity(0, 0)
 
 	, m_first(first)
 	, m_second(second)
@@ -35,39 +34,43 @@ Block& Linker::getSecond()
 
 //#################################################################################################
 
-void Linker::calculateDir()
-{
-	m_dir = m_second.getPosition() - m_first.getPosition();
-	m_length = m_dir.getLength();
-
-	// Normalize vector.
-	if (m_length > std::numeric_limits<f32>::epsilon())
-	{
-		m_dir /= m_length;
-	}
-	else
-	{
-		std::random_device rd;
-		std::uniform_int_distribution<> dist{ 1, 360 };
-
-		// Random direction.
-		m_dir = { std::cosf(dist(rd) * 0.01745329251f), std::sinf(dist(rd) * 0.01745329251f) };
-		m_length = 1.0f;
-	}
-}
-
-
-caDraw::VectorF Linker::calculateElasticity() const
+void Linker::calculateElasticity()
 {
 	/*
 	* Thanks to [https://github.com/pmneila/jsexp/blob/master/massspring/particles.js].
 	*/
 
 
-	float lenGap = m_length - m_defaultLength;
-	float dot = m_dir.dotProduct(m_first.getSpeed() - m_second.getSpeed());
+	auto dir = m_second.getPosition() - m_first.getPosition();
+	float length = dir.getLength();
+
+	// Normalize vector.
+	if (length > std::numeric_limits<f32>::epsilon())
+	{
+		dir /= length;
+	}
+	else
+	{
+		std::random_device rd;
+		std::uniform_int_distribution<> dist{ 1, 360 };
+
+		float rad = dist(rd) * 0.01745329251f;
+
+		// Random direction.
+		dir = { std::cosf(rad), std::sinf(rad) };
+		length = 1.0f;
+	}
+
+	float lenGap = length - m_defaultLength;
+	float dot = dir.dotProduct(m_first.getSpeed() - m_second.getSpeed());
 
 
-	return (m_dir * (lenGap * 0.05f/*stiffness*/ - 0.2f/*damping*/ * dot));
+	m_elasticity = dir * (lenGap * 0.05f/*stiffness*/ - 0.2f/*damping*/ * dot);
+}
+
+
+const caDraw::VectorF& Linker::getElasticity() const
+{
+	return m_elasticity;
 }
 
