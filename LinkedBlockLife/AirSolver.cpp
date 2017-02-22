@@ -29,6 +29,7 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 	auto norWindHere = here.getWind();
 	norWindHere.normalize();
 
+
 	const caDraw::VectorF dirVec[] = {
 		{ 0, -1 },
 		{ 1, 0 },
@@ -39,6 +40,7 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 		{ oneRootTwo, oneRootTwo },
 		{ -oneRootTwo, oneRootTwo },
 	};
+
 
 	const size_t ySubOne = (y <= 0) ? boardSize : y - 1;
 	const size_t xSubOne = (x <= 0) ? boardSize : x - 1;
@@ -52,8 +54,10 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 		xSubOne, x + 1, x + 1, xSubOne
 	};
 
+
 	/// 외력
 	caDraw::VectorF outerForce{ 0, 0 };
+
 
 	for (int n = 0; n < 8; ++n)
 	{
@@ -122,20 +126,8 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 	}
 
 
-	// 외력을 이용하여 타일에 존재하는 블럭들에게 힘을 가함.
-	auto& blocks = here.getBlocks();
-	
-	if (!blocks.empty())
-	{
-		const auto density = static_cast<float>(blocks.size());
-
-		outerForce /= density;
-
-		for (auto* pBlocks : blocks)
-		{
-			pBlocks->addForce(outerForce);
-		}
-	}
+	// 외력 누적.
+	here.addOuterForce(outerForce);
 }
 
 

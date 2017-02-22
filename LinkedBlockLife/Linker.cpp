@@ -27,7 +27,19 @@ Block& Linker::getFirst()
 }
 
 
+const Block& Linker::getFirst() const
+{
+	return m_first;
+}
+
+
 Block& Linker::getSecond()
+{
+	return m_second;
+}
+
+
+const Block& Linker::getSecond() const
 {
 	return m_second;
 }

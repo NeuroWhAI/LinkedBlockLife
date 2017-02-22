@@ -22,6 +22,7 @@ private:
 	std::vector<Block*>* m_pBlocks;
 	std::vector<Block*>* m_pNextBlocks;
 	std::vector<Block*> m_blocks1, m_blocks2;
+	caDraw::VectorF m_outerForce;
 
 
 private:
@@ -37,6 +38,9 @@ public:
 	void addBlock(Block* pBlock);
 	const std::vector<Block*>& getNextBlocks() const;
 	void addNextBlock(Block* pBlock);
+	const caDraw::VectorF& getOuterForce() const;
+	void setOuterForce(const caDraw::VectorF& force);
+	void addOuterForce(const caDraw::VectorF& force);
 
 
 public:

@@ -1,6 +1,6 @@
 #include "ThreadPool.h"
 
-#include <stdexcept>
+#include <cassert>
 
 
 
@@ -12,8 +12,7 @@ auto ThreadPool::reserve(FUNC&& func, ARGS&&... args)
 	using ReturnType = std::result_of_t<FUNC(ARGS...)>;
 
 
-	if (m_running == false)
-		throw std::runtime_error("ThreadPool was stopped.");
+	assert(m_running);
 
 
 	auto job = std::make_shared<std::packaged_task<ReturnType()>>(

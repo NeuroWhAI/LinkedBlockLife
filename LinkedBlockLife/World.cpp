@@ -41,9 +41,29 @@ World::World(std::size_t size)
 
 	for (int i = 0; i < 8; ++i)
 	{
-		auto index = addBlock(std::make_unique<Block>(), 4, 16 + i);
+		auto index = addBlock(std::make_unique<Block>(), 5, 16 + i);
+		m_blocks[index]->setForce({ 1.0f, 0 });
+
+		index = addBlock(std::make_unique<Block>(), 3, 16 + i);
 		m_blocks[index]->setForce({ 1.0f, 0 });
 	}
+
+	for (int i = 0; i < 8; ++i)
+	{
+		auto index = addBlock(std::make_unique<Block>(), 6 + i, 20);
+		m_blocks[index]->setForce({ 1.0f, 0 });
+
+		if (i > 0)
+		{
+			auto linkerIndex = m_linkers.size();
+			m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[i - 1], *m_blocks[i]));
+
+			m_blocks[i - 1]->getLinkerPort().connect(m_linkers[linkerIndex].get());
+			m_blocks[i]->getLinkerPort().connect(m_linkers[linkerIndex].get());
+		}
+	}
+
+	m_board[20][2]->setNextPressure(10000);
 }
 
 //#################################################################################################

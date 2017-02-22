@@ -6,11 +6,12 @@
 Tile::Tile()
 	: m_pBlocks(&m_blocks1)
 	, m_pNextBlocks(&m_blocks2)
+	, m_outerForce(0, 0)
 	
 	, m_wind(0, 0)
 	, m_nextWind(0, 0)
-	, m_pressure(100)
-	, m_nextPressure(100)
+	, m_pressure(10)
+	, m_nextPressure(10)
 {
 
 }
@@ -44,6 +45,24 @@ const std::vector<Block*>& Tile::getNextBlocks() const
 void Tile::addNextBlock(Block* pBlock)
 {
 	m_pNextBlocks->emplace_back(pBlock);
+}
+
+
+const caDraw::VectorF& Tile::getOuterForce() const
+{
+	return m_outerForce;
+}
+
+
+void Tile::setOuterForce(const caDraw::VectorF& force)
+{
+	m_outerForce = force;
+}
+
+
+void Tile::addOuterForce(const caDraw::VectorF& force)
+{
+	m_outerForce += force;
 }
 
 //#################################################################################################

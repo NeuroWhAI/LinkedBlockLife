@@ -28,7 +28,9 @@ private:
 
 public:
 	Block& getFirst();
+	const Block& getFirst() const;
 	Block& getSecond();
+	const Block& getSecond() const;
 
 
 public:

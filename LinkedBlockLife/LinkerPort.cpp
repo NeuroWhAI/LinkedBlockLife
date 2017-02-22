@@ -13,19 +13,19 @@ LinkerPort::LinkerPort(const Block& owner)
 
 //#################################################################################################
 
-bool LinkerPort::checkDuplicate(Linker* linker) const
+bool LinkerPort::contains(Linker const* linker) const
 {
 	if (&linker->getFirst() == &m_owner)
 	{
-		return checkDuplicate(&linker->getSecond());
+		return contains(&linker->getSecond());
 	}
 
 
-	return checkDuplicate(&linker->getFirst());
+	return contains(&linker->getFirst());
 }
 
 
-bool LinkerPort::checkDuplicate(Block* target) const
+bool LinkerPort::contains(Block const* target) const
 {
 	for (auto* block : m_targets)
 	{
@@ -59,15 +59,47 @@ void LinkerPort::disconnectAll()
 	m_targets.clear();
 }
 
+
+void LinkerPort::disconnect(Linker const* linker)
+{
+	const auto size = m_linkers.size();
+
+	for (std::size_t index = 0; index < size; ++index)
+	{
+		if (m_linkers[index] == linker)
+		{
+			m_linkers.erase(m_linkers.begin() + index);
+			m_targets.erase(m_targets.begin() + index);
+			break;
+		}
+	}
+}
+
+
+void LinkerPort::disconnect(Block const* target)
+{
+	const auto size = m_targets.size();
+
+	for (std::size_t index = 0; index < size; ++index)
+	{
+		if (m_targets[index] == target)
+		{
+			m_targets.erase(m_targets.begin() + index);
+			m_linkers.erase(m_linkers.begin() + index);
+			break;
+		}
+	}
+}
+
 //#################################################################################################
 
-std::vector<Linker*>& LinkerPort::getLinkerList()
+const std::vector<Linker*>& LinkerPort::getLinkerList() const
 {
 	return m_linkers;
 }
 
 
-std::vector<Block*>& LinkerPort::getTargetList()
+const std::vector<Block*>& LinkerPort::getTargetList() const
 {
 	return m_targets;
 }
