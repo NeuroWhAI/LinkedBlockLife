@@ -19,9 +19,9 @@ World::World(std::size_t size)
 	}
 
 	// Test
-	addBlock(std::make_unique<Block>(), 20, 20);
-	addBlock(std::make_unique<Block>(), 21, 20);
-	addBlock(std::make_unique<Block>(), 22, 21);
+	addBlock(std::make_unique<Block>(), 10, 20);
+	addBlock(std::make_unique<Block>(), 11, 20);
+	addBlock(std::make_unique<Block>(), 12, 21);
 	m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[0], *m_blocks[1]));
 	m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[1], *m_blocks[2]));
 	m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[2], *m_blocks[0]));
@@ -39,31 +39,13 @@ World::World(std::size_t size)
 	m_blocks[1]->setForce({ 1.0f, 0 });
 	m_blocks[2]->setForce({ 1.0f, 0 });
 
-	for (int i = 0; i < 8; ++i)
+	for (int y = 0; y < 15; ++y)
 	{
-		auto index = addBlock(std::make_unique<Block>(), 5, 16 + i);
-		m_blocks[index]->setForce({ 1.0f, 0 });
-
-		index = addBlock(std::make_unique<Block>(), 3, 16 + i);
-		m_blocks[index]->setForce({ 1.0f, 0 });
-	}
-
-	for (int i = 0; i < 8; ++i)
-	{
-		auto index = addBlock(std::make_unique<Block>(), 6 + i, 20);
-		m_blocks[index]->setForce({ 1.0f, 0 });
-
-		if (i > 0)
+		for (int x = 0; x < 30; ++x)
 		{
-			auto linkerIndex = m_linkers.size();
-			m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[i - 1], *m_blocks[i]));
-
-			m_blocks[i - 1]->getLinkerPort().connect(m_linkers[linkerIndex].get());
-			m_blocks[i]->getLinkerPort().connect(m_linkers[linkerIndex].get());
+			auto index = addBlock(std::make_unique<Block>(), 20 + x, 15 + y);
 		}
 	}
-
-	m_board[20][2]->setNextPressure(10000);
 }
 
 //#################################################################################################

@@ -28,9 +28,9 @@ void MoveSolver::updateTile(Tile& tile)
 		auto outerForce = tile.getOuterForce();
 		outerForce /= static_cast<float>(blocks.size());
 
-		// 외력 작용.
 		for (auto* pBlock : blocks)
 		{
+			// 외력 작용.
 			pBlock->addForce(outerForce);
 		}
 	}
@@ -99,17 +99,13 @@ void MoveSolver::updateBlock(TileBoard& board, std::size_t boardSize, Block& blo
 	if (nextTile.get() != &tile && nextTile->isBlocked())
 	{
 		auto halfSpeed = blockSpeed * 0.5f;
+
 		nextTile->addOuterForce(halfSpeed);
 		block.addForce(-halfSpeed);
-
-		blockSpeed = caDraw::VectorF::Zero;
-		tile.addNextBlock(&block);
 	}
-	else
-	{
-		// 다음 위치에 해당하는 타일에 블럭 등록.
-		nextTile->addNextBlock(&block);
-	}
+	
+	// 다음 위치에 해당하는 타일에 블럭 등록.
+	nextTile->addNextBlock(&block);
 
 
 	// 공기 밀기.
