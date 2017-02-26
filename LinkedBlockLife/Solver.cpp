@@ -1,5 +1,7 @@
 #include "Solver.h"
 
+#include <cassert>
+
 #include "ThreadPool.h"
 #include "Tile.h"
 
@@ -41,18 +43,22 @@ void Solver::foreachTileSafely(std::size_t coreCount)
 	const size_t heightPerCore = boardSize / coreCount;
 
 
+	assert(heightPerCore > 2);
+
+
 	std::vector<std::future<void>> futList;
 
 
 	for (size_t core = 1; core < coreCount; ++core)
 	{
 		auto fut = m_threadPool.reserve(&Solver::foreachTileSafelyRange, this,
-			core * heightPerCore + 2, heightPerCore - 2);
+			(core - 1) * heightPerCore + 2, heightPerCore - 2);
 
 		futList.emplace_back(std::move(fut));
 	}
 
-	foreachTileSafelyRange(2, heightPerCore - 2);
+	foreachTileSafelyRange((coreCount - 1) * heightPerCore + 2,
+		boardSize - ((coreCount - 1) * heightPerCore + 2));
 
 
 	for (auto& fut : futList)
@@ -67,12 +73,12 @@ void Solver::foreachTileSafely(std::size_t coreCount)
 	for (size_t core = 1; core < coreCount; ++core)
 	{
 		auto fut = m_threadPool.reserve(&Solver::foreachTileSafelyRange, this,
-			core * heightPerCore, 2);
+			(core - 1) * heightPerCore, 2);
 
 		futList.emplace_back(std::move(fut));
 	}
 
-	foreachTileSafelyRange(0, 2);
+	foreachTileSafelyRange((coreCount - 1) * heightPerCore, 2);
 
 
 	for (auto& fut : futList)
@@ -95,12 +101,13 @@ void Solver::foreachTile(std::size_t coreCount)
 	for (size_t core = 1; core < coreCount; ++core)
 	{
 		auto fut = m_threadPool.reserve(&Solver::foreachTileRange, this,
-			core * heightPerCore, heightPerCore);
+			(core - 1) * heightPerCore, heightPerCore);
 
 		futList.emplace_back(std::move(fut));
 	}
 
-	foreachTileRange(0, heightPerCore);
+	foreachTileRange((coreCount - 1) * heightPerCore,
+		boardSize - (coreCount - 1) * heightPerCore);
 
 
 	for (auto& fut : futList)
@@ -131,7 +138,8 @@ void Solver::foreachLinker(std::size_t coreCount)
 		}
 	}
 
-	foreachLinkerRange((coreCount - 1) * linkerPerCore, linkerCount - (coreCount - 1) * linkerPerCore);
+	foreachLinkerRange((coreCount - 1) * linkerPerCore,
+		linkerCount - (coreCount - 1) * linkerPerCore);
 
 
 	for (auto& fut : futList)
@@ -162,7 +170,8 @@ void Solver::foreachBlock(std::size_t coreCount)
 		}
 	}
 
-	foreachBlockRange((coreCount - 1) * blockPerCore, blockCount - (coreCount - 1) * blockPerCore);
+	foreachBlockRange((coreCount - 1) * blockPerCore,
+		blockCount - (coreCount - 1) * blockPerCore);
 
 
 	for (auto& fut : futList)

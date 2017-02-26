@@ -1,12 +1,13 @@
 #include "MainScene.h"
 
 #include <sstream>
+#include <thread>
 
 
 
 
 MainScene::MainScene()
-	: m_world(64)
+	: m_world(8 * std::thread::hardware_concurrency())
 	, m_worldTransform(caDraw::Transform::Identity)
 {
 	
