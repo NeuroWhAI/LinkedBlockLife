@@ -23,7 +23,7 @@ public:
 
 
 public:
-	void updateTile(Tile& tile);
+	void updateTile(Tile& tile, std::size_t x, std::size_t y);
 	void updateBlock(TileBoard& board, std::size_t boardSize, Block& block, Tile& tile,
 		std::size_t density);
 };

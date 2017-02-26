@@ -1,5 +1,7 @@
 #include "MoveSolver.h"
 
+#include <random>
+
 #include "CodeAdapter\EasyCA.h"
 
 #include "Block.h"
@@ -19,26 +21,67 @@ MoveSolver::MoveSolver()
 
 //#################################################################################################
 
-void MoveSolver::updateTile(Tile& tile)
+void MoveSolver::updateTile(Tile& tile, std::size_t x, std::size_t y)
 {
+	tile.updateBlockList();
+
+
 	auto& blocks = tile.getBlocks();
 
 	if (!blocks.empty())
 	{
+		const auto density = blocks.size();
+
+		/// 두 블럭 이상 뭉쳐있어서 퍼트려야 하는가?
+		const bool doSpread = (density >= 2);
+
 		auto outerForce = tile.getOuterForce();
-		outerForce /= static_cast<float>(blocks.size());
+		outerForce /= static_cast<float>(density);
 
 		for (auto* pBlock : blocks)
 		{
+			// 두 블럭 이상 뭉쳐있을 경우 타일 밖으로 나가도록 가속.
+			if (doSpread)
+			{
+				auto pushVec = pBlock->getPosition();
+				pushVec -= caDraw::VectorF{
+					static_cast<float>(x),
+					static_cast<float>(y)
+				};
+
+				const float lenSq = pushVec.getLengthSq();
+
+				// 정규화.
+				if (lenSq > std::numeric_limits<f32>::epsilon())
+				{
+					const float len = std::sqrt(lenSq);
+
+					pushVec /= len;
+				}
+				else
+				{
+					std::random_device rd;
+					std::uniform_int_distribution<> dist{ 1, 360 };
+
+					const float rad = dist(rd) * 0.01745329251f;
+
+					// Random direction.
+					pushVec.x = std::cosf(rad);
+					pushVec.y = std::sinf(rad);
+				}
+
+				pushVec *= 6.6742e-5f;
+
+				pBlock->addForce(pushVec);
+			}
+
 			// 외력 작용.
 			pBlock->addForce(outerForce);
 		}
 	}
 
-	tile.setOuterForce({ 0, 0 });
-
-
-	tile.updateBlockList();
+	// 외력 초기화.
+	tile.setOuterForce(caDraw::VectorF::Zero);
 }
 
 
@@ -98,7 +141,7 @@ void MoveSolver::updateBlock(TileBoard& board, std::size_t boardSize, Block& blo
 
 	if (nextTile.get() != &tile && nextTile->isBlocked())
 	{
-		auto halfSpeed = blockSpeed * 0.5f;
+		auto halfSpeed = blockSpeed * 0.8f;
 
 		nextTile->addOuterForce(halfSpeed);
 		block.addForce(-halfSpeed);

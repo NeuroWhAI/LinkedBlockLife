@@ -78,7 +78,7 @@ void DrawableWorld::drawAir(Graphics& g)
 
 			if (m_board[y][x]->isBlocked())
 			{
-				color = caDraw::Color::Gray;
+				color = { 128, 128, 128 };
 			}
 
 			rectArt->fillRectangle(x * m_pixelPerUnit, y * m_pixelPerUnit, 4, 4, color);
@@ -97,7 +97,7 @@ void DrawableWorld::drawAir(Graphics& g)
 		circleArt->fillEllipse(block->getPosition().x * m_pixelPerUnit,
 			block->getPosition().y * m_pixelPerUnit,
 			pixelPerUnitF, pixelPerUnitF,
-			caDraw::Color::Gray);
+			{ 240, 240, 240 });
 	}
 
 

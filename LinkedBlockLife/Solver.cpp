@@ -219,7 +219,7 @@ void Solver::foreachTileRange(std::size_t beginY, std::size_t count)
 			auto& tile = *line[x];
 
 			m_airSolver.updateTile(tile, boardSize, x, y);
-			m_moveSolver.updateTile(tile);
+			m_moveSolver.updateTile(tile, x, y);
 		}
 	}
 }

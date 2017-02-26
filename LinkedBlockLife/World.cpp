@@ -39,7 +39,7 @@ World::World(std::size_t size)
 	m_blocks[1]->setForce({ 1.0f, 0 });
 	m_blocks[2]->setForce({ 1.0f, 0 });
 
-	for (int y = 0; y < 15; ++y)
+	for (int y = 0; y < 10; ++y)
 	{
 		for (int x = 0; x < 30; ++x)
 		{

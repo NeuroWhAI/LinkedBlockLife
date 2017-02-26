@@ -75,10 +75,10 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 		// 외력 계산
 		if (dirVec[n].dotProduct(windNear) < 0)
 		{
-			outerForce += windNear * 0.001f;
+			outerForce += windNear * 0.00001f;
 		}
 
-		outerForce += dirVec[n] * (-pressureNear * 0.0001f);
+		outerForce += dirVec[n] * (-pressureNear * 0.00001f);
 
 
 		// 막힌 블럭이 아니면 기압차를 이용하여 기압의 이동과 바람을 계산한다.
