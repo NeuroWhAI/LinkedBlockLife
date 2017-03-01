@@ -1,21 +1,19 @@
-#ifndef __MAIN_SCENE_H__
-#define __MAIN_SCENE_H__
+#ifndef __MENU_SCENE_H__
+#define __MENU_SCENE_H__
 
 
 #include <chrono>
 
 #include "CodeAdapter\EasyCA.h"
 
-#include "DrawableWorld.h"
 
 
 
-
-class MainScene : public caUtil::Scene
+class MenuScene : public caUtil::Scene
 {
 public:
-	MainScene();
-	virtual ~MainScene();
+	MenuScene();
+	virtual ~MenuScene();
 
 
 private:
@@ -25,16 +23,9 @@ private:
 
 private:
 	caDraw::PanelPtr m_panel;
-	caUI::CheckBoxPtr m_toggleDraw;
-
-
-private:
-	std::chrono::duration<double> m_updateDelay;
-
-
-private:
-	DrawableWorld m_world;
-	caDraw::Transform m_worldTransform;
+	caUI::ButtonPtr m_toMain;
+	caUI::ButtonPtr m_toLab;
+	caUI::ButtonPtr m_exit;
 
 
 public:

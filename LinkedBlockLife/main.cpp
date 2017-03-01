@@ -1,7 +1,7 @@
 #include <CodeAdapter\EasyCA.h>
 #include <CodeAdapterSFML\SFMLFactory.h>
 
-#include "MainScene.h"
+#include "MenuScene.h"
 
 
 
@@ -16,7 +16,7 @@ int main()
 
 
 	auto sceneManager = canew<caUtil::SceneManager>();
-	sceneManager->replaceScene(*window, canew<MainScene>());
+	sceneManager->replaceScene(*window, canew<MenuScene>());
 
 	window->setSceneManager(sceneManager);
 
@@ -27,8 +27,7 @@ int main()
 		caKeyboard->update(*window);
 
 
-		if (sceneManager->hasScene() == false
-			|| caKeyboard->isKeyDown(caSys::Keys::Escape))
+		if (sceneManager->hasScene() == false)
 		{
 			window->exit();
 		}

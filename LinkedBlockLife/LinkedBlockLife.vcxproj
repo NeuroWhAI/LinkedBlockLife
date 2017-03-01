@@ -156,11 +156,13 @@
     <ClCompile Include="AirSolver.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="DrawableWorld.cpp" />
+    <ClCompile Include="LabScene.cpp" />
     <ClCompile Include="Linker.cpp" />
     <ClCompile Include="LinkerPort.cpp" />
     <ClCompile Include="LinkSolver.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="MoveSolver.cpp" />
     <ClCompile Include="Solver.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
@@ -171,10 +173,12 @@
     <ClInclude Include="AirSolver.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="DrawableWorld.h" />
+    <ClInclude Include="LabScene.h" />
     <ClInclude Include="Linker.h" />
     <ClInclude Include="LinkerPort.h" />
     <ClInclude Include="LinkSolver.h" />
     <ClInclude Include="MainScene.h" />
+    <ClInclude Include="MenuScene.h" />
     <ClInclude Include="MoveSolver.h" />
     <ClInclude Include="Solver.h" />
     <ClInclude Include="ThreadPool.h" />

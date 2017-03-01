@@ -74,7 +74,7 @@ void Block::updateSpeed()
 	const float maxSpeed = 1.0f;
 	const float lengthSq = m_speed.getLengthSq();
 
-	if (lengthSq > maxSpeed)
+	if (lengthSq > maxSpeed/* * maxSpeed*/) // 1의 2승은 1이므로 제곱 연산을 제거.
 	{
 		// Normalize speed.
 		m_speed *= maxSpeed / std::sqrt(lengthSq);

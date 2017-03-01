@@ -81,6 +81,12 @@
     <ClCompile Include="MoveSolver.cpp">
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>LinkedBlockLife\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LabScene.cpp">
+      <Filter>LinkedBlockLife\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -118,6 +124,12 @@
     </ClInclude>
     <ClInclude Include="MoveSolver.h">
       <Filter>LinkedBlockLife\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>LinkedBlockLife\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LabScene.h">
+      <Filter>LinkedBlockLife\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

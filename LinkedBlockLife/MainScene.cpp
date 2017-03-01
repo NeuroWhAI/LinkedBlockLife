@@ -3,6 +3,8 @@
 #include <sstream>
 #include <thread>
 
+#include "MenuScene.h"
+
 
 
 
@@ -35,6 +37,17 @@ void MainScene::onInitialize(caDraw::Window& owner)
 	m_panel->size = static_cast<caDraw::SizeF>(winSize);
 	m_panel->transform.position = { 0, 0 };
 
+	m_toggleDraw = canew<caUI::CheckBox>();
+	m_toggleDraw->setFont(m_font);
+	m_toggleDraw->check(true);
+	m_toggleDraw->transform.position = { 2.0f, winSize.height - 32.0f - 2.0f };
+	m_toggleDraw->setSize({ 150, 32 });
+	m_toggleDraw->setText("Draw sim");
+	m_toggleDraw->setTextMargin({ 2, 0 });
+	m_toggleDraw->setBackColor(caDraw::Color::Transparent);
+
+	m_panel->addControl(m_toggleDraw);
+
 
 	addPanel(m_panel);
 }
@@ -52,6 +65,13 @@ void MainScene::onUpdate(caDraw::Window& owner)
 
 
 	auto beginTime = high_resolution_clock::now();
+
+
+	// Go to menu when press Esc.
+	if (caKeyboard->isKeyDown(caSys::Keys::Escape))
+	{
+		reserveNextScene<MenuScene>();
+	}
 
 
 	// Update Sim.
@@ -75,8 +95,11 @@ void MainScene::onDrawBack(caDraw::Graphics& g)
 	auto beginTime = high_resolution_clock::now();
 
 
-	// Render Sim.
-	m_world.draw(g, m_worldTransform);
+	if (m_toggleDraw->isChecked())
+	{
+		// Render Sim.
+		m_world.draw(g, m_worldTransform);
+	}
 
 
 	auto endTime = high_resolution_clock::now();
