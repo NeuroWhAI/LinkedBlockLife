@@ -19,21 +19,12 @@ World::World(std::size_t size)
 	}
 
 	// Test
-	addBlock(std::make_unique<Block>(), 10, 20);
-	addBlock(std::make_unique<Block>(), 11, 20);
-	addBlock(std::make_unique<Block>(), 12, 21);
-	m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[0], *m_blocks[1]));
-	m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[1], *m_blocks[2]));
-	m_linkers.emplace_back(std::make_unique<Linker>(*m_blocks[2], *m_blocks[0]));
-
-	m_blocks[0]->getLinkerPort().connect(m_linkers[0].get());
-	m_blocks[1]->getLinkerPort().connect(m_linkers[0].get());
-
-	m_blocks[1]->getLinkerPort().connect(m_linkers[1].get());
-	m_blocks[2]->getLinkerPort().connect(m_linkers[1].get());
-
-	m_blocks[2]->getLinkerPort().connect(m_linkers[2].get());
-	m_blocks[0]->getLinkerPort().connect(m_linkers[2].get());
+	addBlock(10, 20);
+	addBlock(11, 20);
+	addBlock(12, 21);
+	addLinker(*m_blocks[0], *m_blocks[1]);
+	addLinker(*m_blocks[1], *m_blocks[2]);
+	addLinker(*m_blocks[2], *m_blocks[0]);
 
 	m_blocks[0]->setForce({ 1.0f, 0 });
 	m_blocks[1]->setForce({ 1.0f, 0 });
@@ -43,7 +34,7 @@ World::World(std::size_t size)
 	{
 		for (int x = 0; x < 30; ++x)
 		{
-			auto index = addBlock(std::make_unique<Block>(), 20 + x, 15 + y);
+			addBlock(20 + x, 15 + y);
 		}
 	}
 }
@@ -57,18 +48,38 @@ void World::update()
 
 //#################################################################################################
 
-std::size_t World::addBlock(std::unique_ptr<Block> block, std::size_t x, std::size_t y)
+Block* World::addBlock(std::size_t x, std::size_t y)
 {
-	auto index = m_blocks.size();
+	auto block = std::make_unique<Block>();
+
+	Block* ptr = block.get();
 
 
 	block->setPosition({ static_cast<float>(x), static_cast<float>(y) });
 
-	m_board[y][x]->addBlock(block.get());
+	m_board[y][x]->addBlock(ptr);
 
 	m_blocks.emplace_back(std::move(block));
 
 
-	return index;
+	return ptr;
+}
+
+
+Linker* World::addLinker(Block& first, Block& second)
+{
+	auto linker = std::make_unique<Linker>(first, second);
+
+	Linker* ptr = linker.get();
+
+
+	first.getLinkerPort().connect(ptr);
+	second.getLinkerPort().connect(ptr);
+
+
+	m_linkers.emplace_back(std::move(linker));
+
+
+	return ptr;
 }
 

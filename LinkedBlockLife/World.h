@@ -43,7 +43,8 @@ public:
 
 
 protected:
-	std::size_t addBlock(std::unique_ptr<Block> block, std::size_t x, std::size_t y);
+	Block* addBlock(std::size_t x, std::size_t y);
+	Linker* addLinker(Block& first, Block& second);
 };
 
 
