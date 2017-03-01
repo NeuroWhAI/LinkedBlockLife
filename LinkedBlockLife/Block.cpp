@@ -7,6 +7,7 @@ Block::Block()
 	: m_position(0, 0)
 	, m_speed(0, 0)
 	, m_force(0, 0)
+	, m_energy(100)
 
 	, m_linkerPort(*this)
 {
@@ -62,6 +63,25 @@ void Block::setForce(const caDraw::VectorF& force)
 void Block::addForce(const caDraw::VectorF& force)
 {
 	m_force += force;
+}
+
+//-------------------------------------------------------------------------------------------------
+
+int Block::getEnergy() const
+{
+	return m_energy;
+}
+
+
+void Block::setEnergy(int energy)
+{
+	m_energy = energy;
+}
+
+
+void Block::addEnergy(int energy)
+{
+	m_energy += energy;
 }
 
 //#################################################################################################

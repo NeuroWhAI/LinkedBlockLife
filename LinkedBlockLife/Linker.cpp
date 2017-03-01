@@ -1,7 +1,6 @@
 #include "Linker.h"
 
 #include <cassert>
-#include <algorithm>
 #include <random>
 
 #include "Block.h"

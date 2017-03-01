@@ -23,6 +23,7 @@ private:
 	caDraw::VectorF m_position;
 	caDraw::VectorF m_speed;
 	caDraw::VectorF m_force;
+	int m_energy;
 
 
 private:
@@ -40,6 +41,10 @@ public:
 	const caDraw::VectorF& getForce() const;
 	void setForce(const caDraw::VectorF& force);
 	void addForce(const caDraw::VectorF& force);
+
+	int getEnergy() const;
+	void setEnergy(int energy);
+	void addEnergy(int energy);
 
 
 public:
