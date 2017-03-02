@@ -36,6 +36,22 @@ void Tile::addBlock(Block* pBlock)
 }
 
 
+void Tile::removeBlock(Block const* pTarget)
+{
+	const auto count = m_pBlocks->size();
+	auto& blocks = *m_pBlocks;
+
+	for (std::size_t i = 0; i < count; ++i)
+	{
+		if (blocks[i] == pTarget)
+		{
+			blocks.erase(blocks.begin() + i);
+			break;
+		}
+	}
+}
+
+
 const std::vector<Block*>& Tile::getNextBlocks() const
 {
 	return *m_pNextBlocks;

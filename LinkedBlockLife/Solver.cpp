@@ -18,6 +18,8 @@ Solver::Solver(ThreadPool& threadPool, TileBoard& tileBoard,
 	, m_tileBoard(tileBoard)
 	, m_blocks(blockList)
 	, m_linkers(linkerList)
+
+	, m_existSolver(std::thread::hardware_concurrency())
 {
 
 }
@@ -32,6 +34,8 @@ void Solver::solve()
 	foreachTile(coreCount);
 	foreachLinker(coreCount);
 	foreachBlock(coreCount);
+
+	m_existSolver.removeTargetBlocks(m_blocks, m_tileBoard);
 }
 
 //#################################################################################################
@@ -164,13 +168,13 @@ void Solver::foreachBlock(std::size_t coreCount)
 		for (size_t core = 1; core < coreCount; ++core)
 		{
 			auto fut = m_threadPool.reserve(&Solver::foreachBlockRange, this,
-				(core - 1) * blockPerCore, blockPerCore);
+				core, (core - 1) * blockPerCore, blockPerCore);
 
 			futList.emplace_back(std::move(fut));
 		}
 	}
 
-	foreachBlockRange((coreCount - 1) * blockPerCore,
+	foreachBlockRange(0, (coreCount - 1) * blockPerCore,
 		blockCount - (coreCount - 1) * blockPerCore);
 
 
@@ -246,7 +250,7 @@ void Solver::foreachLinkerRange(std::size_t begin, std::size_t count)
 }
 
 
-void Solver::foreachBlockRange(std::size_t begin, std::size_t count)
+void Solver::foreachBlockRange(std::size_t coreIndex, std::size_t begin, std::size_t count)
 {
 	const size_t boardSize = m_tileBoard.size();
 	const size_t endY = std::min(begin + count, m_blocks.size());
@@ -257,6 +261,7 @@ void Solver::foreachBlockRange(std::size_t begin, std::size_t count)
 		auto& block = *m_blocks[b];
 
 		m_linkSolver.updateBlock(block);
+		m_existSolver.checkBlock(coreIndex, block, b);
 	}
 }
 

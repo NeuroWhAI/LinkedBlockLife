@@ -22,9 +22,9 @@ World::World(std::size_t size)
 	addBlock(10, 20);
 	addBlock(11, 20);
 	addBlock(12, 21);
-	addLinker(*m_blocks[0], *m_blocks[1]);
+	/*addLinker(*m_blocks[0], *m_blocks[1]);
 	addLinker(*m_blocks[1], *m_blocks[2]);
-	addLinker(*m_blocks[2], *m_blocks[0]);
+	addLinker(*m_blocks[2], *m_blocks[0]);*/
 
 	m_blocks[0]->setForce({ 1.0f, 0 });
 	m_blocks[1]->setForce({ 1.0f, 0 });

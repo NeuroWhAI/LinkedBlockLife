@@ -87,6 +87,9 @@
     <ClCompile Include="LabScene.cpp">
       <Filter>LinkedBlockLife\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="ExistSolver.cpp">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="LabScene.h">
       <Filter>LinkedBlockLife\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ExistSolver.h">
+      <Filter>LinkedBlockLife\Solver</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

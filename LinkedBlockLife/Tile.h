@@ -36,6 +36,7 @@ public:
 	bool isBlocked() const;
 	const std::vector<Block*>& getBlocks() const;
 	void addBlock(Block* pBlock);
+	void removeBlock(Block const* pTarget);
 	const std::vector<Block*>& getNextBlocks() const;
 	void addNextBlock(Block* pBlock);
 	const caDraw::VectorF& getOuterForce() const;
