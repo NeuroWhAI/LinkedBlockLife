@@ -9,11 +9,13 @@
 
 
 Linker::Linker(Block& first, Block& second)
-	: m_defaultLength(1.0f)
+	: m_first(first)
+	, m_second(second)
+	
+	, m_defaultLength(1.0f)
 	, m_elasticity(0, 0)
 
-	, m_first(first)
-	, m_second(second)
+	, m_disconnected(false)
 {
 	assert(&first != &second);
 }
@@ -83,5 +85,18 @@ void Linker::calculateElasticity()
 const caDraw::VectorF& Linker::getElasticity() const
 {
 	return m_elasticity;
+}
+
+//#################################################################################################
+
+void Linker::setDisconnectionFlag()
+{
+	m_disconnected = true;
+}
+
+
+bool Linker::isDisconnected() const
+{
+	return m_disconnected;
 }
 

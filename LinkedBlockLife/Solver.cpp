@@ -36,6 +36,7 @@ void Solver::solve()
 	foreachBlock(coreCount);
 
 	m_existSolver.removeTargetBlocks(m_blocks, m_tileBoard);
+	m_existSolver.removeTargetLinkers(m_linkers);
 }
 
 //#################################################################################################
@@ -136,13 +137,13 @@ void Solver::foreachLinker(std::size_t coreCount)
 		for (size_t core = 1; core < coreCount; ++core)
 		{
 			auto fut = m_threadPool.reserve(&Solver::foreachLinkerRange, this,
-				(core - 1) * linkerPerCore, linkerPerCore);
+				core, (core - 1) * linkerPerCore, linkerPerCore);
 
 			futList.emplace_back(std::move(fut));
 		}
 	}
 
-	foreachLinkerRange((coreCount - 1) * linkerPerCore,
+	foreachLinkerRange(0, (coreCount - 1) * linkerPerCore,
 		linkerCount - (coreCount - 1) * linkerPerCore);
 
 
@@ -238,14 +239,17 @@ void Solver::foreachTileRange(std::size_t beginY, std::size_t count)
 }
 
 
-void Solver::foreachLinkerRange(std::size_t begin, std::size_t count)
+void Solver::foreachLinkerRange(std::size_t coreIndex, std::size_t begin, std::size_t count)
 {
 	const size_t endY = std::min(begin + count, m_linkers.size());
 
 
 	for (size_t i = begin; i < endY; ++i)
 	{
-		m_linkSolver.updateLinker(*m_linkers[i]);
+		auto& linker = *m_linkers[i];
+
+		m_linkSolver.updateLinker(linker);
+		m_existSolver.checkLinker(coreIndex, linker, i);
 	}
 }
 

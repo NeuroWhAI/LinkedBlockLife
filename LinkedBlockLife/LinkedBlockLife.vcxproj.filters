@@ -142,5 +142,8 @@
     <None Include="ThreadPool.inl">
       <Filter>LinkedBlockLife\Utility</Filter>
     </None>
+    <None Include="ExistSolver.inl">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </None>
   </ItemGroup>
 </Project>

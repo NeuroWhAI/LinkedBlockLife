@@ -4,6 +4,7 @@
 
 #include "Tile.h"
 #include "Block.h"
+#include "Linker.h"
 
 
 
@@ -13,9 +14,33 @@ using std::size_t;
 //#################################################################################################
 
 ExistSolver::ExistSolver(std::size_t coreCount)
-	: m_needRemove(false)
+	: m_currentCore(0)
+	
+	, m_needRemoveBlock(false)
+	, m_needRemoveLinker(false)
 {
 	m_targetBlocks.resize(coreCount);
+	m_targetLinkers.resize(coreCount);
+}
+
+//#################################################################################################
+
+void ExistSolver::updateIterator(IndexBoard& indexBoard)
+{
+	const auto coreCount = indexBoard.size();
+
+	// 목표가 있는 목록을 찾을때까지 탐색.
+	// 끝까지 목표를 못찾았으면 currentCore는 0이고
+	// currentItr == currentEnd인 상태가 된다.
+	while (m_currentCore != 0 && m_currentItr == m_currentEnd)
+	{
+		++m_currentCore;
+		if (m_currentCore >= coreCount)
+			m_currentCore = 0;
+
+		m_currentItr = indexBoard[m_currentCore].cbegin();
+		m_currentEnd = indexBoard[m_currentCore].cend();
+	}
 }
 
 //#################################################################################################
@@ -27,7 +52,7 @@ void ExistSolver::checkBlock(std::size_t coreIndex, Block& block, std::size_t bl
 
 	if (block.getEnergy() <= 0)
 	{
-		m_needRemove = true;
+		m_needRemoveBlock = true;
 
 		m_targetBlocks[coreIndex].emplace_back(blockIndex);
 	}
@@ -36,76 +61,37 @@ void ExistSolver::checkBlock(std::size_t coreIndex, Block& block, std::size_t bl
 
 void ExistSolver::removeTargetBlocks(BlockList& blocks, TileBoard& board)
 {
-	if (m_needRemove)
+	if (m_needRemoveBlock)
 	{
-		const auto coreCount = m_targetBlocks.size();
+		removeTarget(blocks, m_targetBlocks, &ExistSolver::removeBlockFromWorld, board);
 
-		auto pivot = blocks.begin();
-		const auto blockCount = blocks.size();
+		m_needRemoveBlock = false;
+	}
+}
 
-		std::size_t currentCore = ((coreCount >= 2) ? 1 : 0);
-		auto currentItr = m_targetBlocks[currentCore].cbegin();
-		auto currentEnd = m_targetBlocks[currentCore].cend();
+//-------------------------------------------------------------------------------------------------
 
-		/*
-		* 아래 코드는 m_targetBlocks[1], m_targetBlocks[2], ..., m_targetBlocks[3], m_targetBlocks[0]
-		* 순서에서 각 원소를 차례로 순회하였을때 값이 오름차순으로 되어있을때만
-		* 정상적으로 동작한다.
-		* 때문에 Solver에서 checkBlock을 호출하는 로직에 의존성을 가진다.
-		*/
-
-		for (std::size_t index = 0; index < blockCount; ++index)
-		{
-			// 목표가 있는 목록을 찾을때까지 탐색.
-			// 끝까지 목표를 못찾았으면 currentCore는 0이고
-			// currentItr == currentEnd인 상태가 된다.
-			while (currentCore != 0 && currentItr == currentEnd)
-			{
-				++currentCore;
-				if (currentCore >= coreCount)
-					currentCore = 0;
-
-				currentItr = m_targetBlocks[currentCore].cbegin();
-				currentEnd = m_targetBlocks[currentCore].cend();
-			}
-
-			// 삭제할 목표가 아직 남아있고
-			// 삭제할 목표를 찾았으면
-			if ((currentCore != 0 || currentItr != currentEnd)
-				&& *currentItr == index)
-			{
-				// 먼저 월드에서 제거.
-				removeBlockFromWorld(*blocks[index], board);
-
-				// 기존 목록에 저장하지 않고 다음 목표로 이동.
-				++currentItr;
-			}
-			else
-			{
-				// 삭제할 목표가 아니면
-
-				if (*pivot != blocks[index])
-				{
-					// 그대로 기존 목록에 저장.
-					*pivot = std::move(blocks[index]);
-				}
-
-				++pivot;
-			}
-		}
+void ExistSolver::checkLinker(std::size_t coreIndex, Linker& linker, std::size_t linkerIndex)
+{
+	assert(coreIndex < m_targetLinkers.size());
 
 
-		// 완벽히 제거.
-		blocks.erase(pivot, blocks.end());
+	if (linker.isDisconnected())
+	{
+		m_needRemoveLinker = true;
+
+		m_targetLinkers[coreIndex].emplace_back(linkerIndex);
+	}
+}
 
 
-		// 목표 초기화.
-		for (auto& ls : m_targetBlocks)
-		{
-			ls.clear();
-		}
+void ExistSolver::removeTargetLinkers(LinkerList& linkers)
+{
+	if (m_needRemoveLinker)
+	{
+		removeTarget(linkers, m_targetLinkers, &ExistSolver::removeLinkerFromWorld);
 
-		m_needRemove = false;
+		m_needRemoveLinker = false;
 	}
 }
 
@@ -123,6 +109,26 @@ void ExistSolver::removeBlockFromWorld(Block& block, TileBoard& board)
 	board[tileCoord.y][tileCoord.x]->removeBlock(&block);
 
 
-	// TODO: 링커 끊기 및 링커 삭제.
+	auto& linkerPort = block.getLinkerPort();
+	auto& linkers = linkerPort.getLinkerList();
+	auto& others = linkerPort.getTargetList();
+
+	// 링커와 반대편 블럭의 연결 해제
+	for (auto* pOther : others)
+	{
+		pOther->getLinkerPort().disconnect(&block);
+	}
+
+	// 링커 제거 예약.
+	for (auto* pLinker : linkers)
+	{
+		pLinker->setDisconnectionFlag();
+	}
+}
+
+
+void ExistSolver::removeLinkerFromWorld(Linker& linker)
+{
+	// NOTE: 아직은 할 일 없음.
 }
 

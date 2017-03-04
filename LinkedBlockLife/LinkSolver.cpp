@@ -26,7 +26,6 @@ void LinkSolver::updateLinker(Linker& linker)
 void LinkSolver::updateBlock(Block& block)
 {
 	auto& linkerPort = block.getLinkerPort();
-
 	auto& linkers = linkerPort.getLinkerList();
 
 	for (auto* linker : linkers)

@@ -60,7 +60,7 @@ private:
 private:
 	void foreachTileSafelyRange(std::size_t beginY, std::size_t count);
 	void foreachTileRange(std::size_t beginY, std::size_t count);
-	void foreachLinkerRange(std::size_t begin, std::size_t count);
+	void foreachLinkerRange(std::size_t coreIndex, std::size_t begin, std::size_t count);
 	void foreachBlockRange(std::size_t coreIndex, std::size_t begin, std::size_t count);
 };
 
