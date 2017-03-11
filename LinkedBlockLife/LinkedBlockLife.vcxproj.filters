@@ -40,6 +40,9 @@
     <Filter Include="LinkedBlockLife\LinkerPort">
       <UniqueIdentifier>{83f8b677-28fe-47a6-a9d1-82da68f50146}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LinkedBlockLife\Processor">
+      <UniqueIdentifier>{8658e9e8-31e2-4eed-8957-7f05ba5ce8ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,6 +93,9 @@
     <ClCompile Include="ExistSolver.cpp">
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClCompile>
+    <ClCompile Include="Processor.cpp">
+      <Filter>LinkedBlockLife\Processor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -136,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="ExistSolver.h">
       <Filter>LinkedBlockLife\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="Processor.h">
+      <Filter>LinkedBlockLife\Processor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

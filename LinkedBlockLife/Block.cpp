@@ -10,6 +10,8 @@ Block::Block()
 	, m_energy(100)
 
 	, m_linkerPort(*this)
+
+	, m_data(0)
 {
 
 }
@@ -86,6 +88,12 @@ void Block::addEnergy(int energy)
 
 //#################################################################################################
 
+bool Block::willDisappear() const
+{
+	return (m_energy <= 0);
+}
+
+
 void Block::updateSpeed()
 {
 	m_speed += m_force;
@@ -115,5 +123,18 @@ void Block::updatePosition()
 LinkerPort& Block::getLinkerPort()
 {
 	return m_linkerPort;
+}
+
+//#################################################################################################
+
+int Block::getData() const
+{
+	return m_data;
+}
+
+
+void Block::setData(int data)
+{
+	m_data = data;
 }
 

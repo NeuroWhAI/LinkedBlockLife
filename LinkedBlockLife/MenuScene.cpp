@@ -80,7 +80,10 @@ void MenuScene::onRelease()
 
 void MenuScene::onUpdate(caDraw::Window& owner)
 {
-	
+	if (caKeyboard->isKeyDown(caSys::Keys::Escape))
+	{
+		reserveNextScene(nullptr);
+	}
 }
 
 

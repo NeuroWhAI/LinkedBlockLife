@@ -100,6 +100,16 @@ void DrawableWorld::drawAir(Graphics& g)
 			{ 240, 240, 240 });
 	}
 
+	for (auto& proc : m_processors)
+	{
+		auto* pBlock = proc->getBlock();
+
+		circleArt->fillEllipse(pBlock->getPosition().x * m_pixelPerUnit,
+			pBlock->getPosition().y * m_pixelPerUnit,
+			pixelPerUnitF, pixelPerUnitF,
+			{ 255, 127, 39 });
+	}
+
 
 	circleArt->endFillEllipse();
 }

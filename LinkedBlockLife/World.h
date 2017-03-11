@@ -10,6 +10,7 @@
 #include "Tile.h"
 #include "Linker.h"
 #include "Block.h"
+#include "Processor.h"
 
 
 
@@ -36,6 +37,7 @@ protected:
 	TileBoard m_board;
 	std::vector<std::unique_ptr<Linker>> m_linkers;
 	std::vector<std::unique_ptr<Block>> m_blocks;
+	std::vector<std::unique_ptr<Processor>> m_processors;
 
 
 public:
@@ -45,6 +47,7 @@ public:
 protected:
 	Block* addBlock(std::size_t x, std::size_t y);
 	Linker* addLinker(Block& first, Block& second);
+	Processor* addProcessor(Block* pBlock, const caDraw::VectorF& dir);
 };
 
 

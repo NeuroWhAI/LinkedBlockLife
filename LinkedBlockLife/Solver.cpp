@@ -4,6 +4,7 @@
 
 #include "ThreadPool.h"
 #include "Tile.h"
+#include "Processor.h"
 
 
 
@@ -13,11 +14,13 @@ using std::size_t;
 //#################################################################################################
 
 Solver::Solver(ThreadPool& threadPool, TileBoard& tileBoard,
-	BlockList& blockList, LinkerList& linkerList)
+	BlockList& blockList, LinkerList& linkerList,
+	ProcList& procList)
 	: m_threadPool(threadPool)
 	, m_tileBoard(tileBoard)
 	, m_blocks(blockList)
 	, m_linkers(linkerList)
+	, m_procs(procList)
 
 	, m_existSolver(std::thread::hardware_concurrency())
 {
@@ -34,9 +37,11 @@ void Solver::solve()
 	foreachTile(coreCount);
 	foreachLinker(coreCount);
 	foreachBlock(coreCount);
+	foreachProc(coreCount);
 
 	m_existSolver.removeTargetBlocks(m_blocks, m_tileBoard);
 	m_existSolver.removeTargetLinkers(m_linkers);
+	m_existSolver.removeTargetProcessors(m_procs);
 }
 
 //#################################################################################################
@@ -185,6 +190,38 @@ void Solver::foreachBlock(std::size_t coreCount)
 	}
 }
 
+
+void Solver::foreachProc(std::size_t coreCount)
+{
+	const size_t procCount = m_procs.size();
+
+	const size_t procPerCore = procCount / coreCount;
+
+
+	std::vector<std::future<void>> futList;
+
+
+	if (procPerCore > 0)
+	{
+		for (size_t core = 1; core < coreCount; ++core)
+		{
+			auto fut = m_threadPool.reserve(&Solver::foreachProcRange, this,
+				core, (core - 1) * procPerCore, procPerCore);
+
+			futList.emplace_back(std::move(fut));
+		}
+	}
+
+	foreachProcRange(0, (coreCount - 1) * procPerCore,
+		procCount - (coreCount - 1) * procPerCore);
+
+
+	for (auto& fut : futList)
+	{
+		fut.wait();
+	}
+}
+
 //#################################################################################################
 
 void Solver::foreachTileSafelyRange(std::size_t beginY, std::size_t count)
@@ -256,7 +293,6 @@ void Solver::foreachLinkerRange(std::size_t coreIndex, std::size_t begin, std::s
 
 void Solver::foreachBlockRange(std::size_t coreIndex, std::size_t begin, std::size_t count)
 {
-	const size_t boardSize = m_tileBoard.size();
 	const size_t endY = std::min(begin + count, m_blocks.size());
 
 
@@ -266,6 +302,22 @@ void Solver::foreachBlockRange(std::size_t coreIndex, std::size_t begin, std::si
 
 		m_linkSolver.updateBlock(block);
 		m_existSolver.checkBlock(coreIndex, block, b);
+	}
+}
+
+
+void Solver::foreachProcRange(std::size_t coreIndex, std::size_t begin, std::size_t count)
+{
+	const size_t endY = std::min(begin + count, m_procs.size());
+
+
+	for (size_t p = begin; p < endY; ++p)
+	{
+		auto& proc = *m_procs[p];
+
+		proc.execute();
+
+		m_existSolver.checkProcessor(coreIndex, proc, p);
 	}
 }
 

@@ -165,6 +165,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="MoveSolver.cpp" />
+    <ClCompile Include="Processor.cpp" />
     <ClCompile Include="Solver.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="MoveSolver.h" />
+    <ClInclude Include="Processor.h" />
     <ClInclude Include="Solver.h" />
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Tile.h" />

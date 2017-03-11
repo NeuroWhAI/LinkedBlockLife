@@ -5,6 +5,7 @@
 #include "Tile.h"
 #include "Block.h"
 #include "Linker.h"
+#include "Processor.h"
 
 
 
@@ -18,9 +19,11 @@ ExistSolver::ExistSolver(std::size_t coreCount)
 	
 	, m_needRemoveBlock(false)
 	, m_needRemoveLinker(false)
+	, m_needRemoveProc(false)
 {
 	m_targetBlocks.resize(coreCount);
 	m_targetLinkers.resize(coreCount);
+	m_targetProcs.resize(coreCount);
 }
 
 //#################################################################################################
@@ -50,7 +53,7 @@ void ExistSolver::checkBlock(std::size_t coreIndex, Block& block, std::size_t bl
 	assert(coreIndex < m_targetBlocks.size());
 
 
-	if (block.getEnergy() <= 0)
+	if (block.willDisappear())
 	{
 		m_needRemoveBlock = true;
 
@@ -95,6 +98,32 @@ void ExistSolver::removeTargetLinkers(LinkerList& linkers)
 	}
 }
 
+//-------------------------------------------------------------------------------------------------
+
+void ExistSolver::checkProcessor(std::size_t coreIndex, Processor& proc, std::size_t procIndex)
+{
+	assert(coreIndex < m_targetProcs.size());
+
+
+	if (proc.willDisappear())
+	{
+		m_needRemoveProc = true;
+
+		m_targetProcs[coreIndex].emplace_back(procIndex);
+	}
+}
+
+
+void ExistSolver::removeTargetProcessors(ProcList& procs)
+{
+	if (m_needRemoveProc)
+	{
+		removeTarget(procs, m_targetProcs, &ExistSolver::removeProcFromWorld);
+
+		m_needRemoveProc = false;
+	}
+}
+
 //#################################################################################################
 
 void ExistSolver::removeBlockFromWorld(Block& block, TileBoard& board)
@@ -128,6 +157,12 @@ void ExistSolver::removeBlockFromWorld(Block& block, TileBoard& board)
 
 
 void ExistSolver::removeLinkerFromWorld(Linker& linker)
+{
+	// NOTE: 아직은 할 일 없음.
+}
+
+
+void ExistSolver::removeProcFromWorld(Processor& proc)
 {
 	// NOTE: 아직은 할 일 없음.
 }

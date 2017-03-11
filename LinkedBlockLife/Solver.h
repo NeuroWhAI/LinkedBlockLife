@@ -17,6 +17,7 @@ class ThreadPool;
 class Tile;
 class Block;
 class Linker;
+class Processor;
 
 
 class Solver
@@ -25,11 +26,13 @@ public:
 	using TileBoard = std::vector<std::vector<std::unique_ptr<Tile>>>;
 	using BlockList = std::vector<std::unique_ptr<Block>>;
 	using LinkerList = std::vector<std::unique_ptr<Linker>>;
+	using ProcList = std::vector<std::unique_ptr<Processor>>;
 
 
 public:
 	Solver(ThreadPool& threadPool, TileBoard& tileBoard,
-		BlockList& blockList, LinkerList& linkerList);
+		BlockList& blockList, LinkerList& linkerList,
+		ProcList& procList);
 
 
 private:
@@ -37,6 +40,7 @@ private:
 	TileBoard& m_tileBoard;
 	BlockList& m_blocks;
 	LinkerList& m_linkers;
+	ProcList& m_procs;
 
 
 private:
@@ -55,6 +59,7 @@ private:
 	void foreachTile(std::size_t coreCount);
 	void foreachLinker(std::size_t coreCount);
 	void foreachBlock(std::size_t coreCount);
+	void foreachProc(std::size_t coreCount);
 
 
 private:
@@ -62,6 +67,7 @@ private:
 	void foreachTileRange(std::size_t beginY, std::size_t count);
 	void foreachLinkerRange(std::size_t coreIndex, std::size_t begin, std::size_t count);
 	void foreachBlockRange(std::size_t coreIndex, std::size_t begin, std::size_t count);
+	void foreachProcRange(std::size_t coreIndex, std::size_t begin, std::size_t count);
 };
 
 

@@ -11,6 +11,7 @@
 class Tile;
 class Block;
 class Linker;
+class Processor;
 
 
 class ExistSolver
@@ -20,6 +21,7 @@ private:
 	using TileBoard = std::vector<std::vector<std::unique_ptr<Tile>>>;
 	using BlockList = std::vector<std::unique_ptr<Block>>;
 	using LinkerList = std::vector<std::unique_ptr<Linker>>;
+	using ProcList = std::vector<std::unique_ptr<Processor>>;
 
 
 public:
@@ -39,6 +41,9 @@ private:
 	IndexBoard m_targetLinkers;
 	bool m_needRemoveLinker;
 
+	IndexBoard m_targetProcs;
+	bool m_needRemoveProc;
+
 
 private:
 	void updateIterator(IndexBoard& indexBoard);
@@ -54,10 +59,14 @@ public:
 	void checkLinker(std::size_t coreIndex, Linker& linker, std::size_t linkerIndex);
 	void removeTargetLinkers(LinkerList& linkers);
 
+	void checkProcessor(std::size_t coreIndex, Processor& proc, std::size_t procIndex);
+	void removeTargetProcessors(ProcList& procs);
+
 
 private:
 	void removeBlockFromWorld(Block& block, TileBoard& board);
 	void removeLinkerFromWorld(Linker& linker);
+	void removeProcFromWorld(Processor& proc);
 };
 
 

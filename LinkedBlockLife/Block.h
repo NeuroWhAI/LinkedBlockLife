@@ -30,6 +30,10 @@ private:
 	LinkerPort m_linkerPort;
 
 
+private:
+	int m_data;
+
+
 public:
 	const caDraw::VectorF& getPosition() const;
 	void setPosition(const caDraw::VectorF& position);
@@ -48,12 +52,18 @@ public:
 
 
 public:
+	bool willDisappear() const;
 	void updateSpeed();
 	void updatePosition();
 
 
 public:
 	LinkerPort& getLinkerPort();
+
+
+public:
+	int getData() const;
+	void setData(int data);
 };
 
 
