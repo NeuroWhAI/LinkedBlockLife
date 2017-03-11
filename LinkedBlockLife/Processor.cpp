@@ -4,6 +4,7 @@
 #include <numeric>
 
 #include "Block.h"
+#include "JobSolver.h"
 
 
 
@@ -15,6 +16,8 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 
 	, m_ram(RAM_SIZE, 0)
 	, m_ptr(0)
+
+	, m_pJobSolver(nullptr)
 {
 	m_cmdList.emplace_back(nullptr);
 	m_cmdList.emplace_back(&Processor::cmdDoJob);
@@ -24,7 +27,8 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 	m_cmdList.emplace_back(&Processor::cmdDec);
 
 	m_jobList.emplace_back(nullptr);
-	m_jobList.emplace_back(&Processor::jobReadNear);
+	m_jobList.emplace_back(&Processor::jobAccumulateNear);
+	m_jobList.emplace_back(&Processor::jobWriteData);
 }
 
 //#################################################################################################
@@ -48,9 +52,12 @@ Block* Processor::getBlock()
 
 //#################################################################################################
 
-void Processor::execute()
+void Processor::execute(JobSolver& jobSolver)
 {
 	assert(m_pBlock != nullptr);
+
+
+	m_pJobSolver = &jobSolver;
 
 
 	// 현재 블럭의 명령어 실행.
@@ -100,6 +107,9 @@ void Processor::moveToNextBlock()
 
 void Processor::cmdDoJob()
 {
+	assert(m_pJobSolver != nullptr);
+
+
 	// 현재 포인터가 위치한 셀의 값에 해당하는 작업 수행.
 	auto job = m_ram[m_ptr];
 
@@ -155,7 +165,7 @@ void Processor::cmdDec()
 
 //#################################################################################################
 
-void Processor::jobReadNear()
+void Processor::jobAccumulateNear()
 {
 	int total = 0;
 
@@ -167,5 +177,11 @@ void Processor::jobReadNear()
 	}
 
 	m_ram[m_ptr] = total;
+}
+
+
+void Processor::jobWriteData()
+{
+	m_pJobSolver->jobWriteBlockData({ m_pBlock, m_ram[m_ptr] });
 }
 

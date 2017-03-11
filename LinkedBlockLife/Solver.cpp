@@ -23,6 +23,7 @@ Solver::Solver(ThreadPool& threadPool, TileBoard& tileBoard,
 	, m_procs(procList)
 
 	, m_existSolver(std::thread::hardware_concurrency())
+	, m_jobSolver(std::thread::hardware_concurrency())
 {
 
 }
@@ -38,6 +39,8 @@ void Solver::solve()
 	foreachLinker(coreCount);
 	foreachBlock(coreCount);
 	foreachProc(coreCount);
+
+	m_jobSolver.performAllJobs();
 
 	m_existSolver.removeTargetBlocks(m_blocks, m_tileBoard);
 	m_existSolver.removeTargetLinkers(m_linkers);
@@ -315,8 +318,7 @@ void Solver::foreachProcRange(std::size_t coreIndex, std::size_t begin, std::siz
 	{
 		auto& proc = *m_procs[p];
 
-		proc.execute();
-
+		m_jobSolver.updateProcessor(coreIndex, proc);
 		m_existSolver.checkProcessor(coreIndex, proc, p);
 	}
 }

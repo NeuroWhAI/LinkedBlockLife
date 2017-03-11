@@ -96,6 +96,9 @@
     <ClCompile Include="Processor.cpp">
       <Filter>LinkedBlockLife\Processor</Filter>
     </ClCompile>
+    <ClCompile Include="JobSolver.cpp">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -145,6 +148,12 @@
     </ClInclude>
     <ClInclude Include="Processor.h">
       <Filter>LinkedBlockLife\Processor</Filter>
+    </ClInclude>
+    <ClInclude Include="JobSolver.h">
+      <Filter>LinkedBlockLife\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="JobArgument.h">
+      <Filter>LinkedBlockLife\Solver</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

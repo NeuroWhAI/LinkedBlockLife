@@ -17,13 +17,14 @@ using std::size_t;
 ExistSolver::ExistSolver(std::size_t coreCount)
 	: m_currentCore(0)
 	
+	, m_targetBlocks(coreCount)
 	, m_needRemoveBlock(false)
+	, m_targetLinkers(coreCount)
 	, m_needRemoveLinker(false)
+	, m_targetProcs(coreCount)
 	, m_needRemoveProc(false)
 {
-	m_targetBlocks.resize(coreCount);
-	m_targetLinkers.resize(coreCount);
-	m_targetProcs.resize(coreCount);
+
 }
 
 //#################################################################################################

@@ -10,6 +10,7 @@
 
 
 class Block;
+class JobSolver;
 
 
 class Processor
@@ -38,6 +39,7 @@ private:
 
 private:
 	std::vector<void(Processor::*)()> m_jobList;
+	JobSolver* m_pJobSolver;
 
 
 public:
@@ -47,14 +49,14 @@ public:
 
 
 public:
-	void execute();
+	void execute(JobSolver& jobSolver);
 
 
 private:
 	void moveToNextBlock();
 
 
-private:
+private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
 	void cmdDoJob();
 	void cmdPtr2Right();
 	void cmdPtr2Left();
@@ -62,8 +64,9 @@ private:
 	void cmdDec();
 
 
-private:
-	void jobReadNear();
+private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
+	void jobAccumulateNear();
+	void jobWriteData();
 };
 
 

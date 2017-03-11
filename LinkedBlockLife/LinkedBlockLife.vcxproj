@@ -157,6 +157,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="DrawableWorld.cpp" />
     <ClCompile Include="ExistSolver.cpp" />
+    <ClCompile Include="JobSolver.cpp" />
     <ClCompile Include="LabScene.cpp" />
     <ClCompile Include="Linker.cpp" />
     <ClCompile Include="LinkerPort.cpp" />
@@ -176,6 +177,8 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="DrawableWorld.h" />
     <ClInclude Include="ExistSolver.h" />
+    <ClInclude Include="JobArgument.h" />
+    <ClInclude Include="JobSolver.h" />
     <ClInclude Include="LabScene.h" />
     <ClInclude Include="Linker.h" />
     <ClInclude Include="LinkerPort.h" />

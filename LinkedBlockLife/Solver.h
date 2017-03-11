@@ -9,6 +9,7 @@
 #include "LinkSolver.h"
 #include "MoveSolver.h"
 #include "ExistSolver.h"
+#include "JobSolver.h"
 
 
 
@@ -48,6 +49,7 @@ private:
 	LinkSolver m_linkSolver;
 	MoveSolver m_moveSolver;
 	ExistSolver m_existSolver;
+	JobSolver m_jobSolver;
 
 
 public:
