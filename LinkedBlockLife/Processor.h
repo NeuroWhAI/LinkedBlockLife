@@ -68,6 +68,7 @@ private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
 private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
 	void jobAccumulateNear();
 	void jobWriteData();
+	void jobBoomLinker();
 };
 
 

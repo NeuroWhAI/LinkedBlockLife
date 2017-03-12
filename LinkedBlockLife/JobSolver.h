@@ -3,7 +3,6 @@
 
 
 #include <vector>
-#include <deque>
 
 #include "JobArgument.h"
 
@@ -17,7 +16,7 @@ class JobSolver
 {
 private:
 	template <typename T>
-	using JobBoard = std::vector<std::deque<T>>;
+	using JobBoard = std::vector<std::vector<T>>;
 
 
 public:
@@ -26,6 +25,7 @@ public:
 
 private:
 	JobBoard<JobWriteBlockData> m_jobsWriteBlockData;
+	JobBoard<JobBoomLinker> m_jobsBoomLinker;
 
 
 public:
@@ -35,11 +35,13 @@ public:
 
 public:
 	void jobWriteBlockData(std::size_t coreIndex, const JobWriteBlockData& args);
+	void jobBoomLinker(std::size_t coreIndex, const JobBoomLinker& args);
 
 
 private:
 	void clearAllJobs();
 	void writeBlockData();
+	void boomLinker();
 };
 
 

@@ -8,11 +8,15 @@
 
 
 
+const float Linker::DEFAULT_LENGTH = 1.0f;
+
+//#################################################################################################
+
 Linker::Linker(Block& first, Block& second)
 	: m_first(first)
 	, m_second(second)
 	
-	, m_defaultLength(1.0f)
+	, m_targetLength(DEFAULT_LENGTH)
 	, m_elasticity(0, 0)
 
 	, m_disconnected(false)
@@ -74,17 +78,26 @@ void Linker::calculateElasticity()
 		length = 1.0f;
 	}
 
-	float lenGap = length - m_defaultLength;
+	float lenGap = length - m_targetLength;
 	float dot = dir.dotProduct(m_first.getSpeed() - m_second.getSpeed());
 
 
 	m_elasticity = dir * (lenGap * 0.05f/*stiffness*/ - 0.2f/*damping*/ * dot);
+
+
+	m_targetLength = DEFAULT_LENGTH;
 }
 
 
 const caDraw::VectorF& Linker::getElasticity() const
 {
 	return m_elasticity;
+}
+
+
+void Linker::boom(float scale)
+{
+	m_targetLength = DEFAULT_LENGTH * scale;
 }
 
 //#################################################################################################

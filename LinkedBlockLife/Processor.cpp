@@ -30,6 +30,7 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 	m_jobList.emplace_back(nullptr);
 	m_jobList.emplace_back(&Processor::jobAccumulateNear);
 	m_jobList.emplace_back(&Processor::jobWriteData);
+	m_jobList.emplace_back(&Processor::jobBoomLinker);
 }
 
 //#################################################################################################
@@ -185,5 +186,16 @@ void Processor::jobAccumulateNear()
 void Processor::jobWriteData()
 {
 	m_pJobSolver->jobWriteBlockData(m_tempCoreIndex, { m_pBlock, m_ram[m_ptr] });
+}
+
+
+void Processor::jobBoomLinker()
+{
+	auto& linkers = m_pBlock->getLinkerPort().getLinkerList();
+
+	for (auto* pLinker : linkers)
+	{
+		m_pJobSolver->jobBoomLinker(m_tempCoreIndex, { pLinker });
+	}
 }
 

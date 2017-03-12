@@ -39,6 +39,25 @@ World::World(std::size_t size)
 			addBlock(20 + x, 15 + y);
 		}
 	}
+
+	auto index = m_blocks.size();
+
+	addBlock(10, 40, 4);
+	addBlock(11, 40, 4);
+	addBlock(12, 40, 4);
+	addBlock(13, 40, 1);
+	addBlock(14, 40, 5);
+	addBlock(15, 40, 5);
+	addBlock(15, 40, 5);
+
+	addLinker(*m_blocks[index], *m_blocks[index + 1]);
+	addLinker(*m_blocks[index + 1], *m_blocks[index + 2]);
+	addLinker(*m_blocks[index + 2], *m_blocks[index + 3]);
+	addLinker(*m_blocks[index + 3], *m_blocks[index + 4]);
+	addLinker(*m_blocks[index + 4], *m_blocks[index + 5]);
+	addLinker(*m_blocks[index + 5], *m_blocks[index + 6]);
+
+	addProcessor(m_blocks[index].get(), { 1, 0 });
 }
 
 //#################################################################################################
@@ -50,7 +69,7 @@ void World::update()
 
 //#################################################################################################
 
-Block* World::addBlock(std::size_t x, std::size_t y)
+Block* World::addBlock(std::size_t x, std::size_t y, int data)
 {
 	auto block = std::make_unique<Block>();
 
@@ -58,6 +77,7 @@ Block* World::addBlock(std::size_t x, std::size_t y)
 
 
 	block->setPosition({ static_cast<float>(x), static_cast<float>(y) });
+	block->setData(data);
 
 	m_board[y][x]->addBlock(ptr);
 

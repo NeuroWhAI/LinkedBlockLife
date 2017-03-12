@@ -12,6 +12,10 @@ class Block;
 
 class Linker
 {
+private:
+	static const float DEFAULT_LENGTH;
+
+
 public:
 	Linker(Block& first, Block& second);
 
@@ -22,7 +26,7 @@ private:
 
 
 private:
-	const float m_defaultLength;
+	float m_targetLength;
 	caDraw::VectorF m_elasticity;
 
 
@@ -40,6 +44,7 @@ public:
 public:
 	void calculateElasticity();
 	const caDraw::VectorF& getElasticity() const;
+	void boom(float scale);
 
 
 public:

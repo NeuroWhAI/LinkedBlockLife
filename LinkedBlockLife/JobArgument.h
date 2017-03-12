@@ -3,6 +3,7 @@
 
 
 class Block;
+class Linker;
 
 
 class JobWriteBlockData
@@ -16,6 +17,18 @@ public:
 public:
 	Block* pTarget;
 	int data;
+};
+
+
+class JobBoomLinker
+{
+public:
+	JobBoomLinker(Linker* pTarget)
+		: pTarget(pTarget)
+	{ }
+
+public:
+	Linker* pTarget;
 };
 
 
