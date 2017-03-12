@@ -18,6 +18,7 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 	, m_ptr(0)
 
 	, m_pJobSolver(nullptr)
+	, m_tempCoreIndex(0)
 {
 	m_cmdList.emplace_back(nullptr);
 	m_cmdList.emplace_back(&Processor::cmdDoJob);
@@ -52,12 +53,13 @@ Block* Processor::getBlock()
 
 //#################################################################################################
 
-void Processor::execute(JobSolver& jobSolver)
+void Processor::execute(std::size_t coreIndex, JobSolver& jobSolver)
 {
 	assert(m_pBlock != nullptr);
 
 
 	m_pJobSolver = &jobSolver;
+	m_tempCoreIndex = coreIndex;
 
 
 	// 현재 블럭의 명령어 실행.
@@ -182,6 +184,6 @@ void Processor::jobAccumulateNear()
 
 void Processor::jobWriteData()
 {
-	m_pJobSolver->jobWriteBlockData({ m_pBlock, m_ram[m_ptr] });
+	m_pJobSolver->jobWriteBlockData(m_tempCoreIndex, { m_pBlock, m_ram[m_ptr] });
 }
 

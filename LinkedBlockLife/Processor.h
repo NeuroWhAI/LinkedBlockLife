@@ -40,6 +40,7 @@ private:
 private:
 	std::vector<void(Processor::*)()> m_jobList;
 	JobSolver* m_pJobSolver;
+	std::size_t m_tempCoreIndex;
 
 
 public:
@@ -49,7 +50,7 @@ public:
 
 
 public:
-	void execute(JobSolver& jobSolver);
+	void execute(std::size_t coreIndex, JobSolver& jobSolver);
 
 
 private:

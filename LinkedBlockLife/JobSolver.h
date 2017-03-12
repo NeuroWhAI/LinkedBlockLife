@@ -25,10 +25,6 @@ public:
 
 
 private:
-	std::size_t m_currentCore;
-
-
-private:
 	JobBoard<JobWriteBlockData> m_jobsWriteBlockData;
 
 
@@ -38,7 +34,7 @@ public:
 
 
 public:
-	void jobWriteBlockData(const JobWriteBlockData& args);
+	void jobWriteBlockData(std::size_t coreIndex, const JobWriteBlockData& args);
 
 
 private:

@@ -7,9 +7,7 @@
 
 
 JobSolver::JobSolver(std::size_t coreCount)
-	: m_currentCore(0)
-
-	, m_jobsWriteBlockData(coreCount)
+	: m_jobsWriteBlockData(coreCount)
 {
 
 }
@@ -18,9 +16,7 @@ JobSolver::JobSolver(std::size_t coreCount)
 
 void JobSolver::updateProcessor(std::size_t coreIndex, Processor& proc)
 {
-	m_currentCore = coreIndex;
-
-	proc.execute(*this);
+	proc.execute(coreIndex, *this);
 }
 
 
@@ -35,9 +31,9 @@ void JobSolver::performAllJobs()
 
 //#################################################################################################
 
-void JobSolver::jobWriteBlockData(const JobWriteBlockData& args)
+void JobSolver::jobWriteBlockData(std::size_t coreIndex, const JobWriteBlockData& args)
 {
-	m_jobsWriteBlockData[m_currentCore].emplace_back(args);
+	m_jobsWriteBlockData[coreIndex].emplace_back(args);
 }
 
 //#################################################################################################
