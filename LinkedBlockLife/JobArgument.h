@@ -32,4 +32,20 @@ public:
 };
 
 
+class JobGiveEnergy
+{
+public:
+	JobGiveEnergy(Block* pSrc, Block* pDest, int energy)
+		: pSrc(pSrc)
+		, pDest(pDest)
+		, energy(energy)
+	{ }
+
+public:
+	Block* pSrc;
+	Block* pDest;
+	int energy;
+};
+
+
 #endif

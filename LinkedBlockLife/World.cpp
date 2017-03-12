@@ -42,13 +42,13 @@ World::World(std::size_t size)
 
 	auto index = m_blocks.size();
 
-	addBlock(10, 40, 4);
-	addBlock(11, 40, 4);
-	addBlock(12, 40, 4);
-	addBlock(13, 40, 1);
-	addBlock(14, 40, 5);
-	addBlock(15, 40, 5);
-	addBlock(15, 40, 5);
+	addBlock(10, 40, 6);
+	addBlock(11, 40, 6);
+	addBlock(12, 40, 6);
+	addBlock(13, 40, 2);
+	addBlock(14, 40, 7);
+	addBlock(15, 40, 7);
+	addBlock(15, 40, 7);
 
 	addLinker(*m_blocks[index], *m_blocks[index + 1]);
 	addLinker(*m_blocks[index + 1], *m_blocks[index + 2]);

@@ -16,21 +16,35 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 
 	, m_ram(RAM_SIZE, 0)
 	, m_ptr(0)
+	, m_register(0)
+	, m_condition(false)
 
 	, m_pJobSolver(nullptr)
 	, m_tempCoreIndex(0)
 {
 	m_cmdList.emplace_back(nullptr);
+	m_cmdList.emplace_back(&Processor::cmdZero);
 	m_cmdList.emplace_back(&Processor::cmdDoJob);
+	m_cmdList.emplace_back(&Processor::cmdDoJobConditionally);
 	m_cmdList.emplace_back(&Processor::cmdPtr2Left);
 	m_cmdList.emplace_back(&Processor::cmdPtr2Right);
 	m_cmdList.emplace_back(&Processor::cmdInc);
 	m_cmdList.emplace_back(&Processor::cmdDec);
+	m_cmdList.emplace_back(&Processor::cmdReadReg);
+	m_cmdList.emplace_back(&Processor::cmdWriteReg);
+	m_cmdList.emplace_back(&Processor::cmdZeroPtr);
+	m_cmdList.emplace_back(&Processor::cmdSum);
+	m_cmdList.emplace_back(&Processor::cmdMul);
+	m_cmdList.emplace_back(&Processor::cmdEqual);
+	m_cmdList.emplace_back(&Processor::cmdBig);
+	m_cmdList.emplace_back(&Processor::cmdSmall);
 
 	m_jobList.emplace_back(nullptr);
 	m_jobList.emplace_back(&Processor::jobAccumulateNear);
 	m_jobList.emplace_back(&Processor::jobWriteData);
 	m_jobList.emplace_back(&Processor::jobBoomLinker);
+	m_jobList.emplace_back(&Processor::jobSpreadEnergy);
+	m_jobList.emplace_back(&Processor::jobTakeEnergy);
 }
 
 //#################################################################################################
@@ -108,6 +122,12 @@ void Processor::moveToNextBlock()
 
 //#################################################################################################
 
+void Processor::cmdZero()
+{
+	m_ram[m_ptr] = 0;
+}
+
+
 void Processor::cmdDoJob()
 {
 	assert(m_pJobSolver != nullptr);
@@ -119,6 +139,15 @@ void Processor::cmdDoJob()
 	if (job > 0 && static_cast<std::size_t>(job) < m_jobList.size())
 	{
 		(this->*m_jobList[job])();
+	}
+}
+
+
+void Processor::cmdDoJobConditionally()
+{
+	if (m_condition)
+	{
+		cmdDoJob();
 	}
 }
 
@@ -166,6 +195,54 @@ void Processor::cmdDec()
 	}
 }
 
+
+void Processor::cmdReadReg()
+{
+	m_ram[m_ptr] = m_register;
+}
+
+
+void Processor::cmdWriteReg()
+{
+	m_register = m_ram[m_ptr];
+}
+
+
+void Processor::cmdZeroPtr()
+{
+	m_ptr = 0;
+}
+
+
+void Processor::cmdSum()
+{
+	m_ram[m_ptr] += m_register;
+}
+
+
+void Processor::cmdMul()
+{
+	m_ram[m_ptr] *= m_register;
+}
+
+
+void Processor::cmdEqual()
+{
+	m_condition = (m_ram[m_ptr] == m_register);
+}
+
+
+void Processor::cmdBig()
+{
+	m_condition = (m_ram[m_ptr] > m_register);
+}
+
+
+void Processor::cmdSmall()
+{
+	m_condition = (m_ram[m_ptr] < m_register);
+}
+
 //#################################################################################################
 
 void Processor::jobAccumulateNear()
@@ -196,6 +273,40 @@ void Processor::jobBoomLinker()
 	for (auto* pLinker : linkers)
 	{
 		m_pJobSolver->jobBoomLinker(m_tempCoreIndex, { pLinker });
+	}
+}
+
+
+void Processor::jobSpreadEnergy()
+{
+	int leftEnergy = m_pBlock->getEnergy();
+
+	if (leftEnergy > 0)
+	{
+		auto& nearBlocks = m_pBlock->getLinkerPort().getTargetList();
+
+		for (auto* pNear : nearBlocks)
+		{
+			m_pJobSolver->jobGiveEnergy(m_tempCoreIndex, { m_pBlock, pNear, 1 });
+
+			--leftEnergy;
+			if (leftEnergy <= 0)
+				break;
+		}
+	}
+}
+
+
+void Processor::jobTakeEnergy()
+{
+	auto& nearBlocks = m_pBlock->getLinkerPort().getTargetList();
+
+	for (auto* pNear : nearBlocks)
+	{
+		if (pNear->getEnergy() >= 1)
+		{
+			m_pJobSolver->jobGiveEnergy(m_tempCoreIndex, { pNear, m_pBlock, 1 });
+		}
 	}
 }
 

@@ -10,6 +10,7 @@
 JobSolver::JobSolver(std::size_t coreCount)
 	: m_jobsWriteBlockData(coreCount)
 	, m_jobsBoomLinker(coreCount)
+	, m_jobsGiveEnergy(coreCount)
 {
 
 }
@@ -27,6 +28,7 @@ void JobSolver::performAllJobs()
 	// 작업 수행
 	writeBlockData();
 	boomLinker();
+	giveEnergy();
 
 
 	clearAllJobs();
@@ -45,6 +47,12 @@ void JobSolver::jobBoomLinker(std::size_t coreIndex, const JobBoomLinker& args)
 	m_jobsBoomLinker[coreIndex].emplace_back(args);
 }
 
+
+void JobSolver::jobGiveEnergy(std::size_t coreIndex, const JobGiveEnergy& args)
+{
+	m_jobsGiveEnergy[coreIndex].emplace_back(args);
+}
+
 //#################################################################################################
 
 void JobSolver::clearAllJobs()
@@ -53,6 +61,9 @@ void JobSolver::clearAllJobs()
 		jobs.clear();
 
 	for (auto& jobs : m_jobsBoomLinker)
+		jobs.clear();
+
+	for (auto& jobs : m_jobsGiveEnergy)
 		jobs.clear();
 }
 
@@ -76,6 +87,22 @@ void JobSolver::boomLinker()
 		for (auto& arg : jobs)
 		{
 			arg.pTarget->boom(32.0f);
+		}
+	}
+}
+
+
+void JobSolver::giveEnergy()
+{
+	for (auto& jobs : m_jobsGiveEnergy)
+	{
+		for (auto& arg : jobs)
+		{
+			if (arg.pSrc->getEnergy() >= arg.energy)
+			{
+				arg.pSrc->addEnergy(-arg.energy);
+				arg.pDest->addEnergy(arg.energy);
+			}
 		}
 	}
 }
