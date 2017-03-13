@@ -13,10 +13,12 @@ using std::size_t;
 
 //#################################################################################################
 
-Solver::Solver(ThreadPool& threadPool, TileBoard& tileBoard,
+Solver::Solver(ThreadPool& threadPool,
+	WorldInteractor& interactor, TileBoard& tileBoard,
 	BlockList& blockList, LinkerList& linkerList,
 	ProcList& procList)
 	: m_threadPool(threadPool)
+	, m_interactor(interactor)
 	, m_tileBoard(tileBoard)
 	, m_blocks(blockList)
 	, m_linkers(linkerList)
@@ -40,7 +42,7 @@ void Solver::solve()
 	foreachBlock(coreCount);
 	foreachProc(coreCount);
 
-	m_jobSolver.performAllJobs();
+	m_jobSolver.performAllJobs(m_interactor);
 
 	m_existSolver.removeTargetBlocks(m_blocks, m_tileBoard);
 	m_existSolver.removeTargetLinkers(m_linkers);

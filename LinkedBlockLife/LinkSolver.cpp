@@ -15,7 +15,10 @@ LinkSolver::LinkSolver()
 
 void LinkSolver::updateLinker(Linker& linker)
 {
-	linker.calculateElasticity();
+	if (linker.isDisconnected() == false)
+	{
+		linker.calculateElasticity();
+	}
 }
 
 

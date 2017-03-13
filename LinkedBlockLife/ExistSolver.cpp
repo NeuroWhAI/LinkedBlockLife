@@ -131,7 +131,7 @@ void ExistSolver::removeBlockFromWorld(Block& block, TileBoard& board)
 {
 	auto& position = block.getPosition();
 
-	caDraw::VectorT<size_t> tileCoord{
+	const caDraw::VectorT<size_t> tileCoord{
 		static_cast<size_t>(position.x + 0.5f),
 		static_cast<size_t>(position.y + 0.5f)
 	};

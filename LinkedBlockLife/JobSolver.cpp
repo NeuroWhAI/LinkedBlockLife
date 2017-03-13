@@ -1,8 +1,10 @@
 #include "JobSolver.h"
 
+#include "WorldInteractor.h"
 #include "Processor.h"
 #include "Block.h"
 #include "Linker.h"
+#include "Tile.h"
 
 
 
@@ -11,6 +13,7 @@ JobSolver::JobSolver(std::size_t coreCount)
 	: m_jobsWriteBlockData(coreCount)
 	, m_jobsBoomLinker(coreCount)
 	, m_jobsGiveEnergy(coreCount)
+	, m_jobsConnectLinker(coreCount)
 {
 
 }
@@ -23,12 +26,13 @@ void JobSolver::updateProcessor(std::size_t coreIndex, Processor& proc)
 }
 
 
-void JobSolver::performAllJobs()
+void JobSolver::performAllJobs(WorldInteractor& interactor)
 {
 	// 작업 수행
 	writeBlockData();
 	boomLinker();
 	giveEnergy();
+	connectLinker(interactor);
 
 
 	clearAllJobs();
@@ -53,6 +57,12 @@ void JobSolver::jobGiveEnergy(std::size_t coreIndex, const JobGiveEnergy& args)
 	m_jobsGiveEnergy[coreIndex].emplace_back(args);
 }
 
+
+void JobSolver::jobConnectLinker(std::size_t coreIndex, const JobConnectLinker& args)
+{
+	m_jobsConnectLinker[coreIndex].emplace_back(args);
+}
+
 //#################################################################################################
 
 void JobSolver::clearAllJobs()
@@ -64,6 +74,9 @@ void JobSolver::clearAllJobs()
 		jobs.clear();
 
 	for (auto& jobs : m_jobsGiveEnergy)
+		jobs.clear();
+
+	for (auto& jobs : m_jobsConnectLinker)
 		jobs.clear();
 }
 
@@ -103,6 +116,18 @@ void JobSolver::giveEnergy()
 				arg.pSrc->addEnergy(-arg.energy);
 				arg.pDest->addEnergy(arg.energy);
 			}
+		}
+	}
+}
+
+
+void JobSolver::connectLinker(WorldInteractor& interactor)
+{
+	for (auto& jobs : m_jobsConnectLinker)
+	{
+		for (auto& arg : jobs)
+		{
+			interactor.connectLinkerToNear(arg.pCenter);
 		}
 	}
 }

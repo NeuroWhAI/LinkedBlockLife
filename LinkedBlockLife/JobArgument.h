@@ -48,4 +48,16 @@ public:
 };
 
 
+class JobConnectLinker
+{
+public:
+	JobConnectLinker(Block* pCenter)
+		: pCenter(pCenter)
+	{ }
+
+public:
+	Block* pCenter;
+};
+
+
 #endif

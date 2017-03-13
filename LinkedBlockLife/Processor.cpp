@@ -45,6 +45,7 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 	m_jobList.emplace_back(&Processor::jobBoomLinker);
 	m_jobList.emplace_back(&Processor::jobSpreadEnergy);
 	m_jobList.emplace_back(&Processor::jobTakeEnergy);
+	m_jobList.emplace_back(&Processor::jobConnectLinker);
 }
 
 //#################################################################################################
@@ -308,5 +309,11 @@ void Processor::jobTakeEnergy()
 			m_pJobSolver->jobGiveEnergy(m_tempCoreIndex, { pNear, m_pBlock, 1 });
 		}
 	}
+}
+
+
+void Processor::jobConnectLinker()
+{
+	m_pJobSolver->jobConnectLinker(m_tempCoreIndex, { m_pBlock });
 }
 

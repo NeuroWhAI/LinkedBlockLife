@@ -171,6 +171,7 @@
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="World.cpp" />
+    <ClCompile Include="WorldInteractor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AirSolver.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="WorldInteractor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ExistSolver.inl" />

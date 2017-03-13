@@ -43,6 +43,9 @@
     <Filter Include="LinkedBlockLife\Processor">
       <UniqueIdentifier>{8658e9e8-31e2-4eed-8957-7f05ba5ce8ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LinkedBlockLife\WorldInteractor">
+      <UniqueIdentifier>{0755c888-6678-4cbd-92f2-5de2c80a1618}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -99,6 +102,9 @@
     <ClCompile Include="JobSolver.cpp">
       <Filter>LinkedBlockLife\Solver</Filter>
     </ClCompile>
+    <ClCompile Include="WorldInteractor.cpp">
+      <Filter>LinkedBlockLife\WorldInteractor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -154,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="JobArgument.h">
       <Filter>LinkedBlockLife\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldInteractor.h">
+      <Filter>LinkedBlockLife\WorldInteractor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

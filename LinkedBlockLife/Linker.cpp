@@ -58,6 +58,9 @@ void Linker::calculateElasticity()
 	*/
 
 
+	assert(m_disconnected == false);
+
+
 	auto dir = m_second.getPosition() - m_first.getPosition();
 	float length = dir.getLength();
 

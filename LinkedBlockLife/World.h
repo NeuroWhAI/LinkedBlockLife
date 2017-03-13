@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "ThreadPool.h"
+#include "WorldInteractor.h"
 #include "Solver.h"
 #include "Tile.h"
 #include "Linker.h"
@@ -31,6 +32,7 @@ private:
 
 private:
 	Solver m_solver;
+	WorldInteractor m_interactor;
 
 
 protected:

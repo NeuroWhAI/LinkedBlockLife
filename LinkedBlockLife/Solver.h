@@ -15,6 +15,7 @@
 
 
 class ThreadPool;
+class WorldInteractor;
 class Tile;
 class Block;
 class Linker;
@@ -31,13 +32,15 @@ public:
 
 
 public:
-	Solver(ThreadPool& threadPool, TileBoard& tileBoard,
+	Solver(ThreadPool& threadPool,
+		WorldInteractor& interactor, TileBoard& tileBoard,
 		BlockList& blockList, LinkerList& linkerList,
 		ProcList& procList);
 
 
 private:
 	ThreadPool& m_threadPool;
+	WorldInteractor& m_interactor;
 	TileBoard& m_tileBoard;
 	BlockList& m_blocks;
 	LinkerList& m_linkers;
