@@ -14,6 +14,7 @@ JobSolver::JobSolver(std::size_t coreCount)
 	, m_jobsBoomLinker(coreCount)
 	, m_jobsGiveEnergy(coreCount)
 	, m_jobsConnectLinker(coreCount)
+	, m_jobsGenerateProcessor(coreCount)
 {
 
 }
@@ -33,6 +34,7 @@ void JobSolver::performAllJobs(WorldInteractor& interactor)
 	boomLinker();
 	giveEnergy();
 	connectLinker(interactor);
+	generateProcessor(interactor);
 
 
 	clearAllJobs();
@@ -63,6 +65,12 @@ void JobSolver::jobConnectLinker(std::size_t coreIndex, const JobConnectLinker& 
 	m_jobsConnectLinker[coreIndex].emplace_back(args);
 }
 
+
+void JobSolver::jobGenerateProcessor(std::size_t coreIndex, const JobGenerateProcessor& args)
+{
+	m_jobsGenerateProcessor[coreIndex].emplace_back(args);
+}
+
 //#################################################################################################
 
 void JobSolver::clearAllJobs()
@@ -77,6 +85,9 @@ void JobSolver::clearAllJobs()
 		jobs.clear();
 
 	for (auto& jobs : m_jobsConnectLinker)
+		jobs.clear();
+
+	for (auto& jobs : m_jobsGenerateProcessor)
 		jobs.clear();
 }
 
@@ -128,6 +139,18 @@ void JobSolver::connectLinker(WorldInteractor& interactor)
 		for (auto& arg : jobs)
 		{
 			interactor.connectLinkerToNear(arg.pCenter);
+		}
+	}
+}
+
+
+void JobSolver::generateProcessor(WorldInteractor& interactor)
+{
+	for (auto& jobs : m_jobsGenerateProcessor)
+	{
+		for (auto& arg : jobs)
+		{
+			interactor.addProcessor(arg.pBlock, arg.dir);
 		}
 	}
 }

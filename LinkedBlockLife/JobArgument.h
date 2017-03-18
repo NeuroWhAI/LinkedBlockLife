@@ -2,6 +2,11 @@
 #define __JOB_ARGUMENT_H__
 
 
+#include "CodeAdapter\EasyCA.h"
+
+
+
+
 class Block;
 class Linker;
 
@@ -57,6 +62,20 @@ public:
 
 public:
 	Block* pCenter;
+};
+
+
+class JobGenerateProcessor
+{
+public:
+	JobGenerateProcessor(Block* pBlock, const caDraw::VectorF& dir)
+		: pBlock(pBlock)
+		, dir(dir)
+	{ }
+
+public:
+	Block* pBlock;
+	caDraw::VectorF dir;
 };
 
 

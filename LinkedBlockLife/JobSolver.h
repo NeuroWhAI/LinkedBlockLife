@@ -30,11 +30,12 @@ public:
 	explicit JobSolver(std::size_t coreCount);
 
 
-private:
+private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
 	JobBoard<JobWriteBlockData> m_jobsWriteBlockData;
 	JobBoard<JobBoomLinker> m_jobsBoomLinker;
 	JobBoard<JobGiveEnergy> m_jobsGiveEnergy;
 	JobBoard<JobConnectLinker> m_jobsConnectLinker;
+	JobBoard<JobGenerateProcessor> m_jobsGenerateProcessor;
 
 
 public:
@@ -47,6 +48,7 @@ public:
 	void jobBoomLinker(std::size_t coreIndex, const JobBoomLinker& args);
 	void jobGiveEnergy(std::size_t coreIndex, const JobGiveEnergy& args);
 	void jobConnectLinker(std::size_t coreIndex, const JobConnectLinker& args);
+	void jobGenerateProcessor(std::size_t coreIndex, const JobGenerateProcessor& args);
 
 
 private:
@@ -55,6 +57,7 @@ private:
 	void boomLinker();
 	void giveEnergy();
 	void connectLinker(WorldInteractor& interactor);
+	void generateProcessor(WorldInteractor& interactor);
 };
 
 
