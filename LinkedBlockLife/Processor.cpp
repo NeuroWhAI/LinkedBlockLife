@@ -5,6 +5,7 @@
 
 #include "Block.h"
 #include "JobSolver.h"
+#include "WorldInteractor.h"
 
 
 
@@ -21,6 +22,7 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 
 	, m_pJobSolver(nullptr)
 	, m_tempCoreIndex(0)
+	, m_pWorld(nullptr)
 {
 	m_cmdList.emplace_back(nullptr);
 	m_cmdList.emplace_back(&Processor::cmdZero);
@@ -47,6 +49,8 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 	m_jobList.emplace_back(&Processor::jobTakeEnergy);
 	m_jobList.emplace_back(&Processor::jobConnectLinker);
 	m_jobList.emplace_back(&Processor::jobGenerateProcessor);
+	m_jobList.emplace_back(&Processor::jobGenerateBlock);
+	m_jobList.emplace_back(&Processor::jobInverseDirection);
 }
 
 //#################################################################################################
@@ -70,13 +74,14 @@ Block* Processor::getBlock()
 
 //#################################################################################################
 
-void Processor::execute(std::size_t coreIndex, JobSolver& jobSolver)
+void Processor::execute(std::size_t coreIndex, JobSolver& jobSolver, WorldInteractor& interactor)
 {
 	assert(m_pBlock != nullptr);
 
 
 	m_pJobSolver = &jobSolver;
 	m_tempCoreIndex = coreIndex;
+	m_pWorld = &interactor;
 
 
 	// 현재 블럭의 명령어 실행.
@@ -322,5 +327,20 @@ void Processor::jobConnectLinker()
 void Processor::jobGenerateProcessor()
 {
 	m_pJobSolver->jobGenerateProcessor(m_tempCoreIndex, { m_pBlock, m_dir });
+}
+
+
+void Processor::jobGenerateBlock()
+{
+	if (m_pBlock->getEnergy() > Block::DEFAULT_ENERGY)
+	{
+		m_pJobSolver->jobGenerateBlock(m_tempCoreIndex, { m_pBlock, m_ram[m_ptr], m_dir });
+	}
+}
+
+
+void Processor::jobInverseDirection()
+{
+	m_dir = -m_dir;
 }
 

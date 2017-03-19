@@ -11,6 +11,7 @@
 
 class Block;
 class JobSolver;
+class WorldInteractor;
 
 
 class Processor
@@ -43,6 +44,7 @@ private:
 	std::vector<void(Processor::*)()> m_jobList;
 	JobSolver* m_pJobSolver;
 	std::size_t m_tempCoreIndex;
+	WorldInteractor* m_pWorld;
 
 
 public:
@@ -52,7 +54,7 @@ public:
 
 
 public:
-	void execute(std::size_t coreIndex, JobSolver& jobSolver);
+	void execute(std::size_t coreIndex, JobSolver& jobSolver, WorldInteractor& interactor);
 
 
 private:
@@ -85,6 +87,8 @@ private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
 	void jobTakeEnergy();
 	void jobConnectLinker();
 	void jobGenerateProcessor();
+	void jobGenerateBlock();
+	void jobInverseDirection();
 };
 
 

@@ -15,15 +15,16 @@ JobSolver::JobSolver(std::size_t coreCount)
 	, m_jobsGiveEnergy(coreCount)
 	, m_jobsConnectLinker(coreCount)
 	, m_jobsGenerateProcessor(coreCount)
+	, m_jobsGenerateBlock(coreCount)
 {
 
 }
 
 //#################################################################################################
 
-void JobSolver::updateProcessor(std::size_t coreIndex, Processor& proc)
+void JobSolver::updateProcessor(std::size_t coreIndex, Processor& proc, WorldInteractor& interactor)
 {
-	proc.execute(coreIndex, *this);
+	proc.execute(coreIndex, *this, interactor);
 }
 
 
@@ -35,6 +36,7 @@ void JobSolver::performAllJobs(WorldInteractor& interactor)
 	giveEnergy();
 	connectLinker(interactor);
 	generateProcessor(interactor);
+	generateBlock(interactor);
 
 
 	clearAllJobs();
@@ -71,6 +73,12 @@ void JobSolver::jobGenerateProcessor(std::size_t coreIndex, const JobGeneratePro
 	m_jobsGenerateProcessor[coreIndex].emplace_back(args);
 }
 
+
+void JobSolver::jobGenerateBlock(std::size_t coreIndex, const JobGenerateBlock& args)
+{
+	m_jobsGenerateBlock[coreIndex].emplace_back(args);
+}
+
 //#################################################################################################
 
 void JobSolver::clearAllJobs()
@@ -88,6 +96,9 @@ void JobSolver::clearAllJobs()
 		jobs.clear();
 
 	for (auto& jobs : m_jobsGenerateProcessor)
+		jobs.clear();
+
+	for (auto& jobs : m_jobsGenerateBlock)
 		jobs.clear();
 }
 
@@ -151,6 +162,27 @@ void JobSolver::generateProcessor(WorldInteractor& interactor)
 		for (auto& arg : jobs)
 		{
 			interactor.addProcessor(arg.pBlock, arg.dir);
+		}
+	}
+}
+
+
+void JobSolver::generateBlock(WorldInteractor& interactor)
+{
+	for (auto& jobs : m_jobsGenerateBlock)
+	{
+		for (auto& arg : jobs)
+		{
+			if (arg.pParent->getEnergy() > Block::DEFAULT_ENERGY)
+			{
+				Block* pNewBlock = interactor.addBlock(arg.pParent->getPosition(), arg.data);
+				pNewBlock->setSpeed(arg.pParent->getSpeed());
+				pNewBlock->addForce(arg.dir * 0.1f);
+
+				interactor.addLinker(*arg.pParent, *pNewBlock);
+
+				arg.pParent->addEnergy(-Block::DEFAULT_ENERGY);
+			}
 		}
 	}
 }

@@ -79,4 +79,20 @@ public:
 };
 
 
+class JobGenerateBlock
+{
+public:
+	JobGenerateBlock(Block* pParent, int data, const caDraw::VectorF& dir)
+		: pParent(pParent)
+		, data(data)
+		, dir(dir)
+	{ }
+
+public:
+	Block* pParent;
+	int data;
+	caDraw::VectorF dir;
+};
+
+
 #endif

@@ -16,6 +16,10 @@ class Tile;
 class Block
 {
 public:
+	static const int DEFAULT_ENERGY = 100;
+
+
+public:
 	Block();
 
 

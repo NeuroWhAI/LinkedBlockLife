@@ -36,10 +36,11 @@ private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
 	JobBoard<JobGiveEnergy> m_jobsGiveEnergy;
 	JobBoard<JobConnectLinker> m_jobsConnectLinker;
 	JobBoard<JobGenerateProcessor> m_jobsGenerateProcessor;
+	JobBoard<JobGenerateBlock> m_jobsGenerateBlock;
 
 
 public:
-	void updateProcessor(std::size_t coreIndex, Processor& proc);
+	void updateProcessor(std::size_t coreIndex, Processor& proc, WorldInteractor& interactor);
 	void performAllJobs(WorldInteractor& interactor);
 
 
@@ -49,6 +50,7 @@ public:
 	void jobGiveEnergy(std::size_t coreIndex, const JobGiveEnergy& args);
 	void jobConnectLinker(std::size_t coreIndex, const JobConnectLinker& args);
 	void jobGenerateProcessor(std::size_t coreIndex, const JobGenerateProcessor& args);
+	void jobGenerateBlock(std::size_t coreIndex, const JobGenerateBlock& args);
 
 
 private:
@@ -58,6 +60,7 @@ private:
 	void giveEnergy();
 	void connectLinker(WorldInteractor& interactor);
 	void generateProcessor(WorldInteractor& interactor);
+	void generateBlock(WorldInteractor& interactor);
 };
 
 

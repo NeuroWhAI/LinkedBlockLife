@@ -22,15 +22,27 @@ WorldInteractor::WorldInteractor(TileBoard& tileBoard, BlockList& blockList,
 
 Block* WorldInteractor::addBlock(std::size_t x, std::size_t y, int data)
 {
+	return addBlock({ static_cast<float>(x), static_cast<float>(y) }, data);
+}
+
+
+Block* WorldInteractor::addBlock(const caDraw::VectorF& position, int data)
+{
 	auto block = std::make_unique<Block>();
 
 	Block* ptr = block.get();
 
 
-	block->setPosition({ static_cast<float>(x), static_cast<float>(y) });
+	const caDraw::VectorT<size_t> tileCoord{
+		static_cast<size_t>(position.x + 0.5f),
+		static_cast<size_t>(position.y + 0.5f)
+	};
+
+
+	block->setPosition(position);
 	block->setData(data);
 
-	m_tileBoard[y][x]->addBlock(ptr);
+	m_tileBoard[tileCoord.y][tileCoord.x]->addBlock(ptr);
 
 	m_blocks.emplace_back(std::move(block));
 

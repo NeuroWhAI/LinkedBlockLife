@@ -320,7 +320,7 @@ void Solver::foreachProcRange(std::size_t coreIndex, std::size_t begin, std::siz
 	{
 		auto& proc = *m_procs[p];
 
-		m_jobSolver.updateProcessor(coreIndex, proc);
+		m_jobSolver.updateProcessor(coreIndex, proc, m_interactor);
 		m_existSolver.checkProcessor(coreIndex, proc, p);
 	}
 }

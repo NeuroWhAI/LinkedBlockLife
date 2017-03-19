@@ -40,6 +40,7 @@ private:
 
 public:
 	Block* addBlock(std::size_t x, std::size_t y, int data = 0);
+	Block* addBlock(const caDraw::VectorF& position, int data = 0);
 	Linker* addLinker(Block& first, Block& second);
 	Processor* addProcessor(Block* pBlock, const caDraw::VectorF& dir);
 

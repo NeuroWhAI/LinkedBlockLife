@@ -7,7 +7,7 @@ Block::Block()
 	: m_position(0, 0)
 	, m_speed(0, 0)
 	, m_force(0, 0)
-	, m_energy(100)
+	, m_energy(DEFAULT_ENERGY)
 
 	, m_linkerPort(*this)
 
