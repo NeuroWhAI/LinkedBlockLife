@@ -24,6 +24,9 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 	, m_tempCoreIndex(0)
 	, m_pWorld(nullptr)
 {
+	static_assert(MAX_DATA > MIN_DATA, "Must MAX_DATA > MIN_DATA");
+
+
 	m_cmdList.emplace_back(nullptr);
 	m_cmdList.emplace_back(&Processor::cmdZero);
 	m_cmdList.emplace_back(&Processor::cmdDoJob);
@@ -127,11 +130,22 @@ void Processor::moveToNextBlock()
 	m_willDie = m_pBlock->willDisappear();
 }
 
+
+void Processor::setRamAt(std::size_t index, int data)
+{
+	if (data > MAX_DATA)
+		data = MAX_DATA;
+	else if (data < MIN_DATA)
+		data = MIN_DATA;
+
+	m_ram[index] = data;
+}
+
 //#################################################################################################
 
 void Processor::cmdZero()
 {
-	m_ram[m_ptr] = 0;
+	setRamAt(m_ptr, 0);
 }
 
 
@@ -187,25 +201,19 @@ void Processor::cmdPtr2Left()
 
 void Processor::cmdInc()
 {
-	if (++m_ram[m_ptr] > MAX_DATA)
-	{
-		m_ram[m_ptr] = MIN_DATA;
-	}
+	setRamAt(m_ptr, m_ram[m_ptr] + 1);
 }
 
 
 void Processor::cmdDec()
 {
-	if (--m_ram[m_ptr] < MIN_DATA)
-	{
-		m_ram[m_ptr] = MAX_DATA;
-	}
+	setRamAt(m_ptr, m_ram[m_ptr] - 1);
 }
 
 
 void Processor::cmdReadReg()
 {
-	m_ram[m_ptr] = m_register;
+	setRamAt(m_ptr, m_register);
 }
 
 
@@ -223,13 +231,13 @@ void Processor::cmdZeroPtr()
 
 void Processor::cmdSum()
 {
-	m_ram[m_ptr] += m_register;
+	setRamAt(m_ptr, m_ram[m_ptr] + m_register);
 }
 
 
 void Processor::cmdMul()
 {
-	m_ram[m_ptr] *= m_register;
+	setRamAt(m_ptr, m_ram[m_ptr] * m_register);
 }
 
 
@@ -263,7 +271,7 @@ void Processor::jobAccumulateNear()
 		total += pNear->getData();
 	}
 
-	m_ram[m_ptr] = total;
+	setRamAt(m_ptr, total);
 }
 
 

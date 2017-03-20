@@ -59,6 +59,7 @@ public:
 
 private:
 	void moveToNextBlock();
+	void setRamAt(std::size_t index, int data);
 
 
 private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
