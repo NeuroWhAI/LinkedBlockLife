@@ -105,6 +105,9 @@
     <ClCompile Include="WorldInteractor.cpp">
       <Filter>LinkedBlockLife\WorldInteractor</Filter>
     </ClCompile>
+    <ClCompile Include="LabWorld.cpp">
+      <Filter>LinkedBlockLife\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainScene.h">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="WorldInteractor.h">
       <Filter>LinkedBlockLife\WorldInteractor</Filter>
+    </ClInclude>
+    <ClInclude Include="LabWorld.h">
+      <Filter>LinkedBlockLife\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

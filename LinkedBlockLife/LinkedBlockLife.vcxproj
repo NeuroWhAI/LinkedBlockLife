@@ -159,6 +159,7 @@
     <ClCompile Include="ExistSolver.cpp" />
     <ClCompile Include="JobSolver.cpp" />
     <ClCompile Include="LabScene.cpp" />
+    <ClCompile Include="LabWorld.cpp" />
     <ClCompile Include="Linker.cpp" />
     <ClCompile Include="LinkerPort.cpp" />
     <ClCompile Include="LinkSolver.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="JobArgument.h" />
     <ClInclude Include="JobSolver.h" />
     <ClInclude Include="LabScene.h" />
+    <ClInclude Include="LabWorld.h" />
     <ClInclude Include="Linker.h" />
     <ClInclude Include="LinkerPort.h" />
     <ClInclude Include="LinkSolver.h" />

@@ -121,7 +121,7 @@ void JobSolver::boomLinker()
 	{
 		for (auto& arg : jobs)
 		{
-			arg.pTarget->boom(32.0f);
+			arg.pTarget->boom(16.0f);
 		}
 	}
 }

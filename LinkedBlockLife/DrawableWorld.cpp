@@ -16,6 +16,15 @@ DrawableWorld::DrawableWorld(std::size_t size)
 void DrawableWorld::onDraw(Graphics& g, const Transform& parentTransform)
 {
 	drawAir(g);
+	drawBlock(g);
+	drawProcessor(g);
+}
+
+//#################################################################################################
+
+int DrawableWorld::getPixelPerUnit() const
+{
+	return m_pixelPerUnit;
 }
 
 //#################################################################################################
@@ -65,7 +74,7 @@ void DrawableWorld::drawAir(Graphics& g)
 
 	for (std::size_t y = 0; y < boardSize; ++y)
 	{
-		for (std::size_t  x = 0; x < boardSize; ++x)
+		for (std::size_t x = 0; x < boardSize; ++x)
 		{
 			float p = m_board[y][x]->getPressure();
 			float v = m_board[y][x]->getWind().getLength();
@@ -87,6 +96,14 @@ void DrawableWorld::drawAir(Graphics& g)
 
 
 	rectArt->endFillRectangle();
+}
+
+
+void DrawableWorld::drawBlock(Graphics& g)
+{
+	const float pixelPerUnitF = static_cast<float>(m_pixelPerUnit);
+
+	auto& circleArt = g.ellipseArtist;
 
 
 	circleArt->beginFillEllipse();
@@ -103,6 +120,21 @@ void DrawableWorld::drawAir(Graphics& g)
 			pixelPerUnitF, pixelPerUnitF,
 			{ static_cast<int>(alpha), 240, 240, 240 });
 	}
+
+
+	circleArt->endFillEllipse();
+}
+
+
+void DrawableWorld::drawProcessor(Graphics& g)
+{
+	const float pixelPerUnitF = static_cast<float>(m_pixelPerUnit);
+
+	auto& circleArt = g.ellipseArtist;
+
+
+	circleArt->beginFillEllipse();
+
 
 	for (auto& proc : m_processors)
 	{

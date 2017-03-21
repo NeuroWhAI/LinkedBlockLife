@@ -6,11 +6,17 @@
 
 #include "CodeAdapter\EasyCA.h"
 
+#include "LabWorld.h"
+
 
 
 
 class LabScene : public caUtil::Scene
 {
+private:
+	using Graphics = caDraw::Graphics;
+
+
 public:
 	LabScene();
 	virtual ~LabScene();
@@ -23,6 +29,13 @@ private:
 
 private:
 	caDraw::PanelPtr m_panel;
+	caUI::CheckBoxPtr m_toggleUpdate;
+	caUI::CheckBoxPtr m_toggleGrid;
+
+
+private:
+	LabWorld m_world;
+	caDraw::Transform m_worldTransform;
 
 
 public:
@@ -31,6 +44,14 @@ public:
 	virtual void onUpdate(caDraw::Window& owner) override;
 	virtual void onDrawBack(caDraw::Graphics& g) override;
 	virtual void onDrawFront(caDraw::Graphics& g) override;
+
+
+private:
+	void moveWorld();
+
+
+private:
+	void drawGrid(Graphics& g);
 };
 
 

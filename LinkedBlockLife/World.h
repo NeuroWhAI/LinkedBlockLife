@@ -24,6 +24,7 @@ private:
 
 public:
 	explicit World(std::size_t size);
+	virtual ~World() = default;
 
 
 private:
@@ -40,6 +41,10 @@ protected:
 	std::vector<std::unique_ptr<Linker>> m_linkers;
 	std::vector<std::unique_ptr<Block>> m_blocks;
 	std::vector<std::unique_ptr<Processor>> m_processors;
+
+
+public:
+	std::size_t getBoardSize() const;
 
 
 public:

@@ -18,6 +18,7 @@ private:
 
 public:
 	explicit DrawableWorld(std::size_t size);
+	virtual ~DrawableWorld() = default;
 
 
 private:
@@ -28,8 +29,14 @@ protected:
 	virtual void onDraw(Graphics& g, const Transform& parentTransform) override;
 
 
+public:
+	int getPixelPerUnit() const;
+
+
 private:
 	void drawAir(Graphics& g);
+	void drawBlock(Graphics& g);
+	void drawProcessor(Graphics& g);
 };
 
 
