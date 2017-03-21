@@ -32,7 +32,7 @@ void DrawableWorld::drawAir(Graphics& g)
 	auto& lineArt = g.lineArtist;
 
 
-	lineArt->beginDrawLine(1.5f);
+	/*lineArt->beginDrawLine(1.5f);
 
 
 	for (std::size_t y = 0; y < boardSize; ++y)
@@ -57,7 +57,7 @@ void DrawableWorld::drawAir(Graphics& g)
 	}
 
 
-	lineArt->endDrawLine();
+	lineArt->endDrawLine();*/
 
 
 	rectArt->beginFillRectangle();
@@ -94,10 +94,14 @@ void DrawableWorld::drawAir(Graphics& g)
 
 	for (auto& block : m_blocks)
 	{
+		float alpha = 10 + static_cast<float>(block->getEnergy()) / Block::DEFAULT_ENERGY * 245;
+		if (alpha > 255)
+			alpha = 255;
+
 		circleArt->fillEllipse(block->getPosition().x * m_pixelPerUnit,
 			block->getPosition().y * m_pixelPerUnit,
 			pixelPerUnitF, pixelPerUnitF,
-			{ 240, 240, 240 });
+			{ static_cast<int>(alpha), 240, 240, 240 });
 	}
 
 	for (auto& proc : m_processors)

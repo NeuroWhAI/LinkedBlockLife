@@ -45,11 +45,11 @@ void AirSolver::updateNearTile(TileBoard& board, Tile& here, std::size_t x, std:
 	const size_t ySubOne = (y <= 0) ? boardSize : y - 1;
 	const size_t xSubOne = (x <= 0) ? boardSize : x - 1;
 
-	size_t nearY[] = {
+	const size_t nearY[] = {
 		ySubOne, y, y + 1, y,
 		ySubOne, ySubOne, y + 1, y + 1
 	};
-	size_t nearX[] = {
+	const size_t nearX[] = {
 		x, x + 1, x, xSubOne,
 		xSubOne, x + 1, x + 1, xSubOne
 	};
