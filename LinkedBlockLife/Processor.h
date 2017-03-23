@@ -90,6 +90,7 @@ private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
 	void jobGenerateProcessor();
 	void jobGenerateBlock();
 	void jobInverseDirection();
+	void jobTurnDirection();
 };
 
 

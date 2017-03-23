@@ -54,6 +54,7 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 	m_jobList.emplace_back(&Processor::jobGenerateProcessor);
 	m_jobList.emplace_back(&Processor::jobGenerateBlock);
 	m_jobList.emplace_back(&Processor::jobInverseDirection);
+	m_jobList.emplace_back(&Processor::jobTurnDirection);
 }
 
 //#################################################################################################
@@ -350,5 +351,20 @@ void Processor::jobGenerateBlock()
 void Processor::jobInverseDirection()
 {
 	m_dir = -m_dir;
+}
+
+
+void Processor::jobTurnDirection()
+{
+	const auto data = m_pBlock->getData();
+
+	if (data > 0)
+	{
+		m_dir = { -m_dir.y, m_dir.x };
+	}
+	else if (data < 0)
+	{
+		m_dir = { m_dir.y, -m_dir.x };
+	}
 }
 
