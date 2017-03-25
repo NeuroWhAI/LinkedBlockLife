@@ -82,16 +82,18 @@ public:
 class JobGenerateBlock
 {
 public:
-	JobGenerateBlock(Block* pParent, int data, const caDraw::VectorF& dir)
-		: pParent(pParent)
+	JobGenerateBlock(Block* pMother, Block* pFather, const caDraw::VectorF& position, int data)
+		: pMother(pMother)
+		, pFather(pFather)
+		, position(position)
 		, data(data)
-		, dir(dir)
 	{ }
 
 public:
-	Block* pParent;
+	Block* pMother;
+	Block* pFather;
+	caDraw::VectorF position;
 	int data;
-	caDraw::VectorF dir;
 };
 
 

@@ -28,8 +28,11 @@ public:
 
 private:
 	bool m_willDie;
+	Block const* m_pPrevBlock;
 	Block* m_pBlock;
 	caDraw::VectorF m_dir;
+	Block* m_pNextBlock;
+	caDraw::VectorF m_nextDir;
 
 
 private:
@@ -58,7 +61,7 @@ public:
 
 
 private:
-	void moveToNextBlock();
+	void calculateNextBlock();
 	void setRamAt(std::size_t index, int data);
 
 
@@ -78,6 +81,7 @@ private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.
 	void cmdEqual();
 	void cmdBig();
 	void cmdSmall();
+	void cmdReadEnergy();
 
 
 private: // NOTE: 추가/삭제할 때마다 생성자 내용 갱신.

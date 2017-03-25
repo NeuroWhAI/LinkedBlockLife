@@ -12,8 +12,11 @@
 
 Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 	: m_willDie(false)
+	, m_pPrevBlock(nullptr)
 	, m_pBlock(pBlock)
 	, m_dir(dir)
+	, m_pNextBlock(pBlock)
+	, m_nextDir(dir)
 
 	, m_ram(RAM_SIZE, 0)
 	, m_ptr(0)
@@ -43,6 +46,7 @@ Processor::Processor(Block* pBlock, const caDraw::VectorF& dir)
 	m_cmdList.emplace_back(&Processor::cmdEqual);
 	m_cmdList.emplace_back(&Processor::cmdBig);
 	m_cmdList.emplace_back(&Processor::cmdSmall);
+	m_cmdList.emplace_back(&Processor::cmdReadEnergy);
 
 	m_jobList.emplace_back(nullptr);
 	m_jobList.emplace_back(&Processor::jobAccumulateNear);
@@ -88,6 +92,14 @@ void Processor::execute(std::size_t coreIndex, JobSolver& jobSolver, WorldIntera
 	m_pWorld = &interactor;
 
 
+	calculateNextBlock();
+
+	// 다음에 위치할 블럭이 사라질 예정이거나
+	// 방금 거쳤던 블럭 말고는 갈 곳이 없으면
+	// 프로세서는 죽는다.
+	m_willDie = (m_pNextBlock->willDisappear() || m_pNextBlock == m_pBlock);
+
+
 	// 현재 블럭의 명령어 실행.
 	auto cmd = m_pBlock->getData();
 
@@ -97,22 +109,27 @@ void Processor::execute(std::size_t coreIndex, JobSolver& jobSolver, WorldIntera
 	}
 
 
-	moveToNextBlock();
+	m_pPrevBlock = m_pBlock;
+	m_pBlock = m_pNextBlock;
+	m_dir = m_nextDir;
 }
 
 //#################################################################################################
 
-void Processor::moveToNextBlock()
+void Processor::calculateNextBlock()
 {
 	auto& centerPos = m_pBlock->getPosition();
 
 	float maxScore = std::numeric_limits<float>::lowest();
-	auto nextDir = m_dir;
 
 	auto& nearBlocks = m_pBlock->getLinkerPort().getTargetList();
 
-	for (auto* pNearBlock : nearBlocks)
+	for (auto* const pNearBlock : nearBlocks)
 	{
+		// 이전에 왔던 블럭은 제외.
+		if (pNearBlock == m_pPrevBlock)
+			continue;
+
 		auto subVec = pNearBlock->getPosition() - centerPos;
 
 		float score = m_dir.dotProduct(subVec);
@@ -120,15 +137,10 @@ void Processor::moveToNextBlock()
 		if (score > maxScore)
 		{
 			maxScore = score;
-			m_pBlock = pNearBlock;
-			nextDir = subVec;
+			m_pNextBlock = pNearBlock;
+			m_nextDir = subVec;
 		}
 	}
-
-	m_dir = nextDir;
-
-
-	m_willDie = m_pBlock->willDisappear();
 }
 
 
@@ -259,6 +271,12 @@ void Processor::cmdSmall()
 	m_condition = (m_ram[m_ptr] < m_register);
 }
 
+
+void Processor::cmdReadEnergy()
+{
+	setRamAt(m_ptr, m_pBlock->getEnergy());
+}
+
 //#################################################################################################
 
 void Processor::jobAccumulateNear()
@@ -278,7 +296,7 @@ void Processor::jobAccumulateNear()
 
 void Processor::jobWriteData()
 {
-	m_pJobSolver->jobWriteBlockData(m_tempCoreIndex, { m_pBlock, m_ram[m_ptr] });
+	m_pJobSolver->jobWriteBlockData(m_tempCoreIndex, { m_pBlock, m_register });
 }
 
 
@@ -341,9 +359,13 @@ void Processor::jobGenerateProcessor()
 
 void Processor::jobGenerateBlock()
 {
-	if (m_pBlock->getEnergy() > Block::DEFAULT_ENERGY)
+	if (m_pBlock->willDisappear() == false
+		&& m_pNextBlock->willDisappear() == false
+		&& m_pBlock->getEnergy() > Block::DEFAULT_ENERGY)
 	{
-		m_pJobSolver->jobGenerateBlock(m_tempCoreIndex, { m_pBlock, m_ram[m_ptr], m_dir });
+		auto position = (m_pBlock->getPosition() + m_pNextBlock->getPosition()) / 2.0f;
+
+		m_pJobSolver->jobGenerateBlock(m_tempCoreIndex, { m_pBlock, m_pNextBlock, position, m_register });
 	}
 }
 
@@ -356,13 +378,11 @@ void Processor::jobInverseDirection()
 
 void Processor::jobTurnDirection()
 {
-	const auto data = m_pBlock->getData();
-
-	if (data > 0)
+	if (m_register > 0)
 	{
 		m_dir = { -m_dir.y, m_dir.x };
 	}
-	else if (data < 0)
+	else if (m_register < 0)
 	{
 		m_dir = { m_dir.y, -m_dir.x };
 	}

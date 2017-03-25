@@ -20,28 +20,59 @@ World::World(std::size_t size)
 	}
 
 	// Test
+	auto index = m_blocks.size();
+
+	for (float degree = 0; degree < 360; degree += 8.0f)
+	{
+		float x = 32.0f + -cosf(degree * 0.0174533f) * 8.0f;
+		float y = 20.0f + sinf(degree * 0.0174533f) * 8.0f;
+
+		m_interactor.addBlock({ x, y }, 2)->setEnergy(Block::DEFAULT_ENERGY * 20);
+
+		if (index > 0)
+		{
+			addLinker(*m_blocks[index - 1], *m_blocks[index]);
+		}
+
+		++index;
+	}
+
+	addLinker(*m_blocks[index - 1], *m_blocks[0]);
+
+	index = m_blocks.size();
+
+	addBlock(24, 12, 6);
+	addBlock(24, 13, 6);
+	addBlock(24, 14, 6);
+	addBlock(24, 15, 6);
+	addBlock(24, 16, 6);
+	addBlock(24, 17, 6);
+	addBlock(24, 18, 6);
+	addBlock(24, 19, 6);
+
+	addLinker(*m_blocks[index], *m_blocks[index + 1]);
+	addLinker(*m_blocks[index + 1], *m_blocks[index + 2]);
+	addLinker(*m_blocks[index + 2], *m_blocks[index + 3]);
+	addLinker(*m_blocks[index + 3], *m_blocks[index + 4]);
+	addLinker(*m_blocks[index + 4], *m_blocks[index + 5]);
+	addLinker(*m_blocks[index + 5], *m_blocks[index + 6]);
+	addLinker(*m_blocks[index + 6], *m_blocks[index + 7]);
+	addLinker(*m_blocks[index + 7], *m_blocks[0]);
+
+	addProcessor(m_blocks[index].get(), { 1, 0 });
+
+	index = m_blocks.size();
+
 	addBlock(10, 20);
 	addBlock(11, 20);
 	addBlock(12, 21);
-	addLinker(*m_blocks[0], *m_blocks[1]);
-	addLinker(*m_blocks[1], *m_blocks[2]);
-	addLinker(*m_blocks[2], *m_blocks[0]);
+	addLinker(*m_blocks[index], *m_blocks[index + 1]);
+	addLinker(*m_blocks[index + 1], *m_blocks[index + 2]);
+	addLinker(*m_blocks[index + 2], *m_blocks[index]);
 
-	m_blocks[0]->setForce({ 1.0f, 0 });
-	m_blocks[1]->setForce({ 1.0f, 0 });
-	m_blocks[2]->setForce({ 1.0f, 0 });
+	addProcessor(m_blocks[index].get(), { 1, 0 });
 
-	addProcessor(m_blocks[0].get(), { 1, 0 });
-
-	for (int y = 0; y < 10; ++y)
-	{
-		for (int x = 0; x < 30; ++x)
-		{
-			addBlock(20 + x, 15 + y);
-		}
-	}
-
-	auto index = m_blocks.size();
+	index = m_blocks.size();
 
 	addBlock(10, 40, 6);
 	addBlock(11, 40, 6);
@@ -87,6 +118,31 @@ World::World(std::size_t size)
 	addBlock(35, 41);
 	addBlock(36, 41);
 	addBlock(37, 41);
+
+	index = m_blocks.size();
+
+	addBlock(10, 50, 6);
+	addBlock(11, 50, 6);
+	addBlock(12, 50, 6);
+	addBlock(13, 50, 6);
+	addBlock(14, 50, 6);
+	addBlock(15, 50, 6);
+	addBlock(16, 50, 6);
+	addBlock(17, 50, 6);
+	addBlock(18, 50, 2)->addEnergy(Block::DEFAULT_ENERGY * 10);
+	addBlock(19, 50, 0);
+
+	addLinker(*m_blocks[index], *m_blocks[index + 1]);
+	addLinker(*m_blocks[index + 1], *m_blocks[index + 2]);
+	addLinker(*m_blocks[index + 2], *m_blocks[index + 3]);
+	addLinker(*m_blocks[index + 3], *m_blocks[index + 4]);
+	addLinker(*m_blocks[index + 4], *m_blocks[index + 5]);
+	addLinker(*m_blocks[index + 5], *m_blocks[index + 6]);
+	addLinker(*m_blocks[index + 6], *m_blocks[index + 7]);
+	addLinker(*m_blocks[index + 7], *m_blocks[index + 8]);
+	addLinker(*m_blocks[index + 8], *m_blocks[index + 9]);
+
+	addProcessor(m_blocks[index].get(), { 1, 0 });
 }
 
 //#################################################################################################

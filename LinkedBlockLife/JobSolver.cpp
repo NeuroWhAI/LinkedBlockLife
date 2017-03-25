@@ -173,15 +173,18 @@ void JobSolver::generateBlock(WorldInteractor& interactor)
 	{
 		for (auto& arg : jobs)
 		{
-			if (arg.pParent->getEnergy() > Block::DEFAULT_ENERGY)
+			if (arg.pMother->getEnergy() > Block::DEFAULT_ENERGY)
 			{
-				Block* pNewBlock = interactor.addBlock(arg.pParent->getPosition(), arg.data);
-				pNewBlock->setSpeed(arg.pParent->getSpeed());
-				pNewBlock->addForce(arg.dir * 0.1f);
+				Block* pNewBlock = interactor.addBlock(arg.position, arg.data);
+				pNewBlock->setSpeed(arg.pMother->getSpeed());
 
-				interactor.addLinker(*arg.pParent, *pNewBlock);
+				arg.pMother->getLinkerPort().disconnect(arg.pFather);
+				arg.pFather->getLinkerPort().disconnect(arg.pMother);
 
-				arg.pParent->addEnergy(-Block::DEFAULT_ENERGY);
+				interactor.addLinker(*arg.pMother, *pNewBlock);
+				interactor.addLinker(*arg.pFather, *pNewBlock);
+
+				arg.pMother->addEnergy(-Block::DEFAULT_ENERGY);
 			}
 		}
 	}
